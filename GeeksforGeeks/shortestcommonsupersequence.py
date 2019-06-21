@@ -13,9 +13,9 @@ def solve_recursive(n,m):
         return n+1
     
     if s1[n]==s2[m]:
-        dp[(n,m)]=1+solve(n-1,m-1)
+        dp[(n,m)]=1+solve_recursive(n-1,m-1)
         return dp[(n,m)]
-    dp[(n,m)]=1+min(solve(n-1,m) , solve(n,m-1))
+    dp[(n,m)]=1+min(solve_recursive(n-1,m) , solve_recursive(n,m-1))
     return dp[(n,m)]
 
 # Iterative Solution 
