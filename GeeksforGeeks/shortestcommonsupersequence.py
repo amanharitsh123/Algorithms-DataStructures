@@ -49,5 +49,5 @@ for _ in range(int(input())):
     dp={}
     n=len(s1)
     m=len(s2)
-    print(solve_iterative(len(s1)-1,len(s2)-1))
+    print(solve_iterative())
         
