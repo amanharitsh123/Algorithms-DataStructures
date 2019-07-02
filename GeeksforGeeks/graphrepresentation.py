@@ -61,15 +61,16 @@ class Graph:
             stack.append(str(source))
     
     def cycle_util(self,source,stack,visited):
+        ans=False
         if not visited[source]:
             visited[source]=True
             for x in self.nodes[source]:
-                if x in stack:
+                if x in stack or ans:
                     return True
                 else:
                     stack.append(x)
-                    return self.cycle_util(x,stack,visited)
-        return False
+                    ans=ans or self.cycle_util(x,stack,visited)
+        return ans
 
 
     # Cycle Detction in Directed Graph
