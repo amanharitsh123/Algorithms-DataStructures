@@ -1,4 +1,4 @@
-import queue
+import queue,heapq
 # Graph Representation using adjancy list
 # V node and E edges
 class Graph:
@@ -10,7 +10,7 @@ class Graph:
     # Directed Edges
     def addedge(self,x,y):
         self.E+=1
-        self.nodes[x].append(y)
+        self.nodes[x].append((y,1))
     
     # Breadth First Search
     def bfs(self,source):
@@ -86,23 +86,17 @@ class Graph:
         dist[source]=0
         finalized=[False for x in range(self.V+1)]
         while len(q):
-            top=heapq.heapop(q)
+            top=heapq.heappop(q)
             if not finalized[top[1]]:
-                weigth=top[0]
+                weight=top[0]
                 vert=top[1]
                 for x in self.nodes[vert]:
-                    if dist[x[0]]<weight+x[1]:
+                    if dist[x[0]]>weight+x[1]:
                         dist[x[0]]=weight+x[1]
-                        heapq.heappush((dist[x[0]],x[0]))
+                        heapq.heappush(q,(dist[x[0]],x[0]))
                 finalized[vert]=True
         return dist
-
-
-
-
-# Driver function
 graph=Graph(10)
-
 graph.addedge(1,2)
 graph.addedge(2,3)
 graph.addedge(3,4)
@@ -112,8 +106,4 @@ graph.addedge(6,7)
 graph.addedge(7,8)
 graph.addedge(1,10)
 graph.addedge(8,1)
-# graph.printlist()
-print(graph.bfs(1))
-print(graph.dfs(1))
-print(graph.topo_sort())
-print(graph.iscycle())
+print(graph.shotest_path(1))
