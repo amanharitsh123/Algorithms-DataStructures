@@ -23,25 +23,9 @@ class Solution:
         return (max(q[0][0],q[1][0],q[1][1]+q[0][1]+2),1+max(q[1][1],q[0][1]))
     
     # Iterative approach
-    def sol_iterative(self,A):
-        ans=[]
-        for i in range(len(A)):
-            ans.append([0,0])
-        for i in range(len(A)):
-            if A[i]!=-1:
-                edges=1
-                t=A[i]
-                while t != -1:
-                    # print(t)
-                    heapq.heappush(ans[t],edges)
-                    if len(ans[t])>2:
-                        heapq.heappop(ans[t])
-                    t=A[t]
-                    edges+=1
-        ma=-1
-        for i in ans:
-            ma=max(ma,i[0]+i[1])
-        return ma
+    def sol_iterative(self,root,dic):
+        # Computing heights for leaves first
+        
     def solve(self, A):
         root=-1
         dic={}
@@ -56,6 +40,7 @@ class Solution:
                     dic[A[i]].append(i)
                 else:
                     dic[A[i]]=[i]
-        ans = self.sol(root,dic)
+        ans = self.sol_iterative(root,dic)
         # return self.sol_iterative(A)
+        return ans
         
