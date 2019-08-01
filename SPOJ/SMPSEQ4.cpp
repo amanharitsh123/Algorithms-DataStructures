@@ -48,7 +48,7 @@ int main()
     // Using unordered_map
     for(int i=0;i<n;i++)
     {
-        if(map.find(s[i])==map.end())
+        if(map.find(s[i])!=map.end())
         {
             cout<<s[i]<<" ";
         }
