@@ -1,5 +1,6 @@
 from math import *
 # Segment tree class with rmq , range sum and lazy propagation.
+# TC: O(N) Tree Construction O(log n) Query and O(log n) Update.(Without Lazy)
 class segmenttrees:
     def __init__(self,arr):
         self.arr=arr
@@ -28,7 +29,23 @@ class segmenttrees:
     
     def query(self,i,j):
         return self.queryutil(i,j,0,len(self.arr)-1,0)
-
+    
+    def update(self,i,val):
+        self.updateutil(i-1,val,0,len(self.arr)-1,0)
+    
+    def updateutil(self,i,val,x,y,ind):
+        if x>i or y<i:
+            return
+        if x==y and x==i:
+            self.tree[ind]=val
+        else:
+            left=2*ind+1
+            right=2*ind+2
+            mid=(x+y)//2
+            self.updateutil(i,val,x,mid,left)
+            self.updateutil(i,val,mid+1,y,right)
+            self.tree[ind]=min(self.tree[left],self.tree[right])
+        
     def queryutil(self,x,y,i,j,ind):
         if x<=i and y>=j:
             return self.tree[ind]
@@ -46,5 +63,9 @@ arr=list(map(int,input().split()))
 tree=segmenttrees(arr)
 for _ in range(q):
     inp=input().split()
-    inp=[int(x) for x in inp[1:]]
-    print(tree.query(inp[0]-1,inp[1]-1))
+    if inp[0]=='q':
+        inp=[int(x) for x in inp[1:]]
+        print(tree.query(inp[0]-1,inp[1]-1))
+    else:
+        inp=[int(x) for x in inp[1:]]
+        tree.update(inp[0],inp[1])
