@@ -25,6 +25,7 @@ class Solution:
     # Iterative approach
     def sol_iterative(self,root,dic):
         # Computing heights for leaves first
+        pass
         
     def solve(self, A):
         root=-1
