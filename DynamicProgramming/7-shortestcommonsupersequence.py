@@ -2,7 +2,6 @@ s1=""
 s2=""
 dp=[]
 def printlcs(i,j,st):
-    global start1,start2
     if i==0 or j==0:
         return 
     if s1[i-1]==s2[j-1]:
