@@ -6,17 +6,13 @@ from sys import stdin
 mod = 1000000007
 
 def modexp(m,n):
-    if n==0:
-        return 1
-    
-    ans = 1
-    
-    if n%2==0:
-        ans = modexp(m,n//2) % mod
-        ans = ans**2 % mod
-    else:
-        ans = (modexp(m,n-1) % mod * m) % mod
-    return ans
+    res = 1
+    while n>0:
+        if n%2:
+            res = res*m
+        n=n//2
+        m = m*m % mod
+    return res
 
 def inverse(n,m):
     # https://cp-algorithms.com/algebra/extended-euclid-algorithm.html
@@ -36,8 +32,8 @@ for _ in range(int(stdin.readline())):
     m,n = list(map(int,stdin.readline().split()))
     y = modexp(m,n)%mod
     inv = solve(m-1)
-    print(inv)
-    print(((y-1)*inv))
+    # print(inv)
+    # print(((y-1)*inv))
     x = ((y-1)*inv)%mod
     print(x,y)
 
