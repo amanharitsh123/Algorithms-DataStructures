@@ -16,18 +16,18 @@ int main() {
     while(t--) {
         lli n,m;
         cin>>n>>m;
-        vector<pos> orders(n*m);
+        vector<pos> orders;
         std::vector<std::vector<int>> ans(n, std::vector<int>(m, 0));
-        set<lli> s;
+        // set<lli> s;
         unordered_map<int,int> floors;
         for(lli i=0;i<n;i++)
-            for(lli j=0;j<n;j++)
+            for(lli j=0;j<m;j++)
             {
                 lli temp;
                 cin>>temp;
                 pos p;
-                p.x = i;
-                p.y = j;
+                p.x = i+1;
+                p.y = j+1;
                 p.val = temp;
                 orders.push_back(p);
             }
@@ -37,17 +37,23 @@ int main() {
             lli x = i.x, y = i.y, val = i.val;
             x = n-x+1;
             // mark clean
+            --x;
+            --y;
+            // cout<<"here"<<x<<" "<<y<<" "<<val<<endl;
             ans[x][y] = 1;
-            if(s.find(y)!=s.end())
+            
+            // Logic to check for safety of current block.
+            for(auto it = floors.begin();it != floors.end();it++)
             {
-                ans[x][y]=0;
-            } else
-            {
-                // Logic to check for safety of current block
-
-
+                lli q = it->first;
+                lli p = it->second;
+                if((p-x)>=abs(q-y))
+                {
+                    ans[x][y] = 0;
+                    break;
+                }
             }
-            s.insert(y);
+            // s.insert(y);
             if(floors.find(y)!=floors.end())
             {
                 if(floors[y]<x)
@@ -57,9 +63,14 @@ int main() {
             {
                 floors[y] = x;
             }
-            
-            
-
         }
+        // return 0;
+        for(int i=n-1;i>=0;i--) {
+            for(int j=0;j<m;j++)
+            {
+                cout<<ans[i][j];
+            }
+            cout<<endl;
+        }       
     }
 }
