@@ -88,6 +88,12 @@ class trie {
   } 
 };
 
+
+void test_vim(lli a) {
+  int aa;
+  cin>>aa;
+}
+
 int main() {
 	lli t;
 	cin>>t;
@@ -105,6 +111,7 @@ int main() {
   }
   cout<<mi<<endl;
 }
+
 
 
 //3
