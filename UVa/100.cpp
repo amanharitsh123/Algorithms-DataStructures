@@ -7,11 +7,11 @@
 using namespace std;
 typedef unsigned long long int lli;
 #define For(i,n) for(lli I=i;I<n;I++)
-#define COUNT 10000
+#define COUNT 1000000
 
 lli solve(lli n) {
   lli count=1;
-  while(n!=1) {
+  while(n>1) {
     ++count;
     if(n%2)
       n=3*n+1;
@@ -23,17 +23,24 @@ lli solve(lli n) {
 
 int main() {
 
-  lli freq[COUNT],i,j;
-  For(1,COUNT) {
+  lli i,j;
+  lli *freq=new lli[COUNT];
+  for(lli I=1;I<COUNT;I++) {
     freq[I]=solve(I);
   }
-  while(scanf("%d %d",&i,&j)!=EOF)
+  while(cin >> i >> j)
   {
     lli ma=0;
-    for(lli x=i;x<=j;x++)
-      ma=max(ma,freq[x]);
-    printf("%d %d %d\n",i,j,ma);
+    lli I=min(i,j);
+    lli J=max(i,j);
+    if(J>=COUNT)
+        return 0;
+    for(lli x=I;x<=J;x++)
+      if(freq[x]>ma)
+        ma=freq[x];
+    cout << i << " " << j << " " << ma << "\n";
   }
+  free(freq);
   return 0;
 }
 
