@@ -3,6 +3,8 @@
     "python.linting.enabled": true,
     "files.associations": {
         "ostream": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "algorithm": "cpp",
+        "iostream": "cpp"
     }
 }

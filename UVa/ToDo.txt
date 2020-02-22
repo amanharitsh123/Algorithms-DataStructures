@@ -1,3 +1,4 @@
+                    Adhoc Problems
 3. UVa 394 - Mapmaker (array manipulation)
 4. UVa 483 - Word Scramble (read char by char from left to right)
 5. UVa 573 - The Snail (be careful of boundary cases!)
