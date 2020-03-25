@@ -6,11 +6,24 @@
 #include<map>
 using namespace std;
 typedef long long int lli;
-#define For(i,n) for(lli I=i;I<n;I++)
+
+template <typename T>
+void input(vector<T> &arr,lli n) {
+  T temp;
+  for(lli i=0;i<n;i++) cin>>temp, arr.push_back(temp);
+}
+
+template <typename T>
+void output(vector<T> arr) {
+  T temp;
+  for(auto x:arr) cout<<x<<" ";
+  cout<<endl;
+}
+
 int main() {
-	lli t;
-	cin>>t;
-	while(t--) {
+	lli testcases;
+	cin>>testcases;
+	while(testcases--) {
 
 	}
 }
