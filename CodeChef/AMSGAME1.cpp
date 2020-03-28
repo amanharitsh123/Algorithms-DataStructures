@@ -4,12 +4,11 @@
 #include<algorithm>
 #include<unordered_map>
 #include<map>
-#define all(arr) arr.begin(),arr.end()
 using namespace std;
 typedef long long int lli;
 
 template <typename T>
-void input(vector<T> &arr,lli n) {
+void input_vector(vector<T> &arr,lli n) {
   T temp;
   for(lli i=0;i<n;i++) cin>>temp, arr.push_back(temp);
 }
@@ -21,7 +20,6 @@ void output(vector<T> arr) {
   cout<<endl;
 }
 
-
 template <typename T>
 void input_set(set<T> &arr,lli n) {
   T temp;
@@ -29,14 +27,22 @@ void input_set(set<T> &arr,lli n) {
 }
 
 
+// Solution by subtracting min and max repeatedly: TC: O(sum(arr))
 int main() {
-  
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-	
-  lli testcases;
+	lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli n;
+    set<lli> s;
+    cin>>n;
+    input_set(s,n);
+    while((*s.begin())!=(*s.rbegin()))
+    {
+      lli t=*s.rbegin();
+      s.erase(t);
+      s.insert(t-*s.begin());
+    }
+    cout<<*s.begin()<<endl;
 	}
 }
+

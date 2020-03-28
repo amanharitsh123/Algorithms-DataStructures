@@ -4,7 +4,7 @@
 #include<algorithm>
 #include<unordered_map>
 #include<map>
-#define all(arr) arr.begin(),arr.end()
+#include<math.h>
 using namespace std;
 typedef long long int lli;
 
@@ -30,13 +30,25 @@ void input_set(set<T> &arr,lli n) {
 
 
 int main() {
-  
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-	
-  lli testcases;
+	lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    float l,d,s,c;
+    cin>>l>>d>>s>>c;
+    if(d==1) {
+      if(s>=l)
+        cout<<"ALIVE AND KICKING"<<endl;
+      else
+        cout<<"DEAD AND ROTTING"<<endl;
+      continue;
+    }
+    float a=log(c+1);
+    float b=log(l)-log(s);
+    b=b/(d-1.0);
+    if(a>=b)
+      cout<<"ALIVE AND KICKING"<<endl;
+    else
+      cout<<"DEAD AND ROTTING"<<endl;
 	}
 }
+

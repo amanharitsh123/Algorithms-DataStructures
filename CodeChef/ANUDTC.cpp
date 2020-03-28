@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<unordered_map>
 #include<map>
-#define all(arr) arr.begin(),arr.end()
 using namespace std;
 typedef long long int lli;
 
@@ -29,14 +28,30 @@ void input_set(set<T> &arr,lli n) {
 }
 
 
+//Is it possible to make exactly N equal pieces from the whole cake?
+//Is it possible to make exactly N pieces from the whole cake?
+//Is it possible to make exactly N pieces from the whole cake, in such a way that no two of them are equal?
+
 int main() {
-  
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-	
-  lli testcases;
+	lli testcases;
 	cin>>testcases;
 	while(testcases--) {
+    lli n;
+    cin>>n;
+    if(360%n==0)
+      cout<<"y ";
+    else
+      cout<<"n ";
 
+    if(n<=360)
+      cout<<"y ";
+    else
+      cout<<"n ";
+    
+    if(n*(n+1)/2 <=360)
+      cout<<"y"<<endl;
+    else
+      cout<<"n"<<endl;
 	}
 }
+

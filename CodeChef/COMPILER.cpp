@@ -4,7 +4,8 @@
 #include<algorithm>
 #include<unordered_map>
 #include<map>
-#define all(arr) arr.begin(),arr.end()
+#include<utility>
+#include<stack>
 using namespace std;
 typedef long long int lli;
 
@@ -30,13 +31,28 @@ void input_set(set<T> &arr,lli n) {
 
 
 int main() {
-  
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-	
-  lli testcases;
+	lli testcases;
 	cin>>testcases;
+  lli ans=0;
 	while(testcases--) {
-
-	}
+    ans=0;
+    string inp;
+    cin>>inp;
+    stack< pair<char,lli>  > st;
+    st.push({'a',-1});
+    for(int i=0;i<inp.size();i++) {
+      if(inp[i]=='<') {
+        st.push({inp[i],i});
+        continue;
+      }
+      if(st.top().first=='<') {
+          st.pop();
+          if(st.top().second==-1) ans=max(ans,i-st.top().second);
+      } else {
+        st.push({inp[i],i});
+      }
+    }
+    cout<<ans<<endl;
+  }
 }
+

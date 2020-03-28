@@ -37,6 +37,23 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli n,inp,ans=0,g=0;
+    cin>>n;
+    cin>>g;
+    cin>>inp;
+    g=__gcd(g,inp);
+    if(g==1)
+      ans=2;
+    for(lli i=2;i<n;i++) {
+      cin>>inp;
+      g=__gcd(g,inp);
+      if(g==1)
+        ans=i+1;
+    }
+    if(ans!=0)
+      cout<<ans<<endl;
+    else
+      cout<<-1<<endl;
 	}
 }
+

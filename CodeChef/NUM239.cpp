@@ -33,10 +33,22 @@ int main() {
   
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
-	
+  
+  lli N=100001;
+  lli prefix[N];
+	prefix[0]=0;
+  for(lli i=1;i<N;i++)
+    if(i%10==2 || i%10==3 || i%10==9)
+      prefix[i]=1+prefix[i-1];
+    else
+      prefix[i]=prefix[i-1];
+
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli l,r;
+    cin>>l>>r;
+    cout<<prefix[r]-prefix[l-1]<<endl;
 	}
 }
+

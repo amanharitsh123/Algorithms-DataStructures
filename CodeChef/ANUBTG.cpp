@@ -30,13 +30,23 @@ void input_set(set<T> &arr,lli n) {
 
 
 int main() {
-  
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-	
-  lli testcases;
+	lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli n;
+    vector<lli> arr;
+    cin>>n;
+    input(arr,n);
+    sort(all(arr));
+    lli cost=0;
+    for(lli i=arr.size()-1;i>=0;i--) {
+      cost+=arr[i];
+      --i;
+      if(i>=0)
+        cost+=arr[i];
+      i-=2;
+    }
+    cout<<cost<<endl;
 	}
 }
+

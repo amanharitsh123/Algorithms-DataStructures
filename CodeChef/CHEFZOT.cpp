@@ -36,7 +36,17 @@ int main() {
 	
   lli testcases;
 	cin>>testcases;
+  lli last=-1;
+  lli i=0,ans=0,temp;
 	while(testcases--) {
-
+    cin>>temp;
+    if(temp) {
+      ans=max(ans,i-last);
+    } else {
+      last=i;
+    }
+    ++i;
 	}
+  cout<<ans<<endl;
 }
+

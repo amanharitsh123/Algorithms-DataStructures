@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<unordered_map>
 #include<map>
-#define all(arr) arr.begin(),arr.end()
 using namespace std;
 typedef long long int lli;
 
@@ -30,13 +29,18 @@ void input_set(set<T> &arr,lli n) {
 
 
 int main() {
-  
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-	
-  lli testcases;
+	lli testcases;
 	cin>>testcases;
 	while(testcases--) {
+    lli n,temp,gcd;
+    cin>>n;
+    for(lli i=0;i<n;i++) {
+      cin>>temp;
+      if(!i) gcd=temp;
+      else gcd=__gcd(gcd,temp);
 
+    }
+    cout<<gcd<<endl;
 	}
 }
+

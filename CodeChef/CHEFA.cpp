@@ -37,6 +37,14 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli n,ans=0;
+    cin>>n;
+    vector<lli> arr;
+    input(arr,n);
+    sort(all(arr));
+    for(lli i=n-1;i>=0;i-=2)
+      ans+=arr[i];
+    cout<<ans<<endl;
 	}
 }
+

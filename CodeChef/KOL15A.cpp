@@ -37,6 +37,15 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    string inp;
+    cin>>inp;
+    lli ans=0;
+    for(auto x:inp) {
+      if(!isalpha(x)) {
+        ans+=x-'0';
+      }
+    }
+    cout<<ans<<endl;
 	}
 }
+

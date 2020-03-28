@@ -37,6 +37,21 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
-	}
+    string inp;
+    cin>>inp;
+    lli progress=1,days=0;
+    for(lli i=0;i<inp.size();) {
+      if(inp[i]=='#') {
+        ++i;
+      } else {
+        lli curlength=0;
+        while(i<inp.size() and inp[i]=='.')
+          ++curlength,++i;
+        if(curlength>=progress)
+          ++days,progress=curlength+1;
+      }
+    }
+    cout<<days<<endl;
+  }
 }
+
