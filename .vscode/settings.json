@@ -5,6 +5,8 @@
         "ostream": "cpp",
         "cmath": "cpp",
         "algorithm": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp"
     }
 }
