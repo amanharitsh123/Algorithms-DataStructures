@@ -7,6 +7,7 @@
 #include<queue>
 #define all(arr) arr.begin(),arr.end()
 #define pi pair<lli,lli>
+#include<limits.h>
 using namespace std;
 typedef long long int lli;
 
@@ -30,15 +31,9 @@ void input_set(set<T> &arr,lli n) {
   for(lli i=0;i<n;i++) cin>>temp, arr.insert(temp);
 }
 
+void bfs(string inp) {
 
-int main() {
-  
-  ios_base::sync_with_stdio(false);
-  cin.tie(NULL);
-	
-  string inp;
-  cin>>inp;
-  lli n=inp.size();
+ lli n=inp.size();
   queue<pi> q;
   unordered_map<lli,lli> visited;
   unordered_map<char, vector<lli> > adj;
@@ -76,5 +71,46 @@ int main() {
       visited[i-1]=1,q.push({i-1,depth+1});
   }
 
+}
+
+void dynamic_pro(string inp) {
+  lli n=inp.size();
+  lli max_possible_jumps=20; // 00112233445566778899
+  
+  vector<lli> dp(n+2,1000000);
+  
+  vector<lli> chars(10,1000000);
+  
+  dp[1]=0;
+
+  for(lli j=0;j<max_possible_jumps;j++) {
+    // Using data from previous iteration reduce char distance array
+    
+    // for each char 0..9 maintain smallest value from 1st position.
+    for(lli i=1;i<=n;i++) {
+      lli num=inp[i-1]-'0';
+      chars[num]=min(chars[num],dp[i]);
+    }
+
+    for(lli i=1;i<=n;i++) {
+      lli num=inp[i-1]-'0';
+      dp[i]=min(dp[i],dp[i-1]+1);
+      dp[i]=min(dp[i],dp[i+1]+1);
+      dp[i]=min(dp[i],chars[num]+1);
+    }
+
+  }
+  cout<<dp[n]<<endl;
+}
+
+int main() {
+  
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+	
+  string inp;
+  cin>>inp;
+  // bfs(inp);
+  dynamic_pro(inp);
 }
 
