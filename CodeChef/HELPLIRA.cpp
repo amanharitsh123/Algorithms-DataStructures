@@ -4,8 +4,9 @@
 #include<algorithm>
 #include<unordered_map>
 #include<map>
+#include<cmath>
+#include<limits.h>
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -29,19 +30,10 @@ void input_set(set<T> &arr,lli n) {
   for(lli i=0;i<n;i++) cin>>temp, arr.insert(temp);
 }
 
+struct point {
+  lli x,y;
+};
 
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
-    return x;
-  }
-}
 
 int main() {
   
@@ -50,7 +42,19 @@ int main() {
 	
   lli testcases;
 	cin>>testcases;
-	while(testcases--) {
+  lli max_ind=-1,min_ind=-1,ma=LLONG_MIN,mi=LLONG_MAX;
+	for(lli ind=0;ind<testcases;ind++) {
+    
+    lli x1,x2,x3,y1,y2,y3;
+    cin>>x1>>y1>>x2>>y2>>x3>>y3;
+    lli area=(x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2));
+    area=abs(area);
 
+    if(area>=ma)
+      ma=area,max_ind=ind;
+    if(area<=mi)
+      mi=area,min_ind=ind;
 	}
+  cout<<min_ind+1<<" "<<max_ind+1<<endl;
 }
+
