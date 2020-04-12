@@ -4,10 +4,11 @@
 #include<algorithm>
 #include<unordered_map>
 #include<map>
+#define N 100000
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
+
 
 template <typename T>
 void input(vector<T> &arr,lli n) {
@@ -29,19 +30,27 @@ void input_set(set<T> &arr,lli n) {
   for(lli i=0;i<n;i++) cin>>temp, arr.insert(temp);
 }
 
+vector<lli> pfactor(N+1,0);
+vector< vector<lli> > dp(N+1, vector<lli> (6,0));
+void sieve() {
+  for(lli i=2;i<=N;i++) {
+    if(pfactor[i])
+      continue;
+    
+    for(lli j=i;j<=N;j+=i)
+      pfactor[j]+=1;
+  }
 
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
-    return x;
+  for(lli i=1;i<=N;i++) {
+    for(lli k=1;k<=5;k++) {
+      if(pfactor[i]==k)
+        dp[i][k]=1+dp[i-1][k];
+      else
+        dp[i][k]=dp[i-1][k];
+    }
   }
 }
+
 
 int main() {
   
@@ -50,7 +59,11 @@ int main() {
 	
   lli testcases;
 	cin>>testcases;
+  sieve();
 	while(testcases--) {
-
+    lli a,b,k;
+    cin>>a>>b>>k;
+    cout<<dp[b][k]-dp[a-1][k]<<endl;
 	}
 }
+

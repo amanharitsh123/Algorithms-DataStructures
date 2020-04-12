@@ -5,7 +5,6 @@
 #include<unordered_map>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -29,18 +28,26 @@ void input_set(set<T> &arr,lli n) {
   for(lli i=0;i<n;i++) cin>>temp, arr.insert(temp);
 }
 
-
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
-    return x;
+bool possible(string &inp,lli i) {
+  string ref="CHEF";
+  lli t=0;
+  lli ans=true;
+  vector<char> backup;
+  lli x;
+  for(x=i-3;x>=0 and x<=i;x++) {
+    if(inp[x]!='?' and inp[x]!=ref[t]) {
+      ans=false;
+      break;
+    } else {
+      backup.push_back(inp[x]);
+      inp[x]=ref[t];
+    }
+    ++t;
   }
+  if(!ans)
+    for(lli j=i-3;j<x;j++)
+      inp[j]=backup[j-i+3];
+  return ans and x>=0;
 }
 
 int main() {
@@ -51,6 +58,18 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    string inp;
+    cin>>inp;
+    lli n=inp.size();
+    for(lli i=n-1;i>=0;) {
+      if(possible(inp,i))
+        i-=4;
+      else if(inp[i]=='?')
+        inp[i]='A',i-=1;
+      else
+        --i;
+    }
+    cout<<inp<<endl;
 	}
 }
+

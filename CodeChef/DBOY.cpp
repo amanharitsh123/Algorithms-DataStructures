@@ -5,7 +5,7 @@
 #include<unordered_map>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
+#define MAX 100000
 using namespace std;
 typedef long long int lli;
 
@@ -30,19 +30,6 @@ void input_set(set<T> &arr,lli n) {
 }
 
 
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
-    return x;
-  }
-}
-
 int main() {
   
   ios_base::sync_with_stdio(false);
@@ -51,6 +38,32 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli n;
+    cin>>n;
+    vector<lli> houses;
+    vector<lli> fuels;
+    input(houses,n);
+    input(fuels,n);
+    sort(all(fuels));
+    lli term=0;
+    vector< vector<lli> > dp(2,vector<lli> (1001, MAX));
+    for(lli i=0;i<=1;i++)
+      dp[i][0]=0;
+    
+    for(lli j=0;j<=1000;j++) {
+      for(lli i=1;i<=n;i++) {
+        if(fuels[i-1]<=j)
+          dp[term][j]=min(dp[term][j-fuels[i-1]]+1,dp[term^1][j]);
+        else
+          dp[term][j]=dp[term^1][j];
+        term=term^1;
+      }
+    }
+    lli ans=0;
+    for(auto x:houses) {
+      ans+=dp[term][2*x];
+    }
+    cout<<ans<<endl;
 	}
 }
+

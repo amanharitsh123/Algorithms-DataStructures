@@ -5,7 +5,6 @@
 #include<unordered_map>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -16,7 +15,7 @@ void input(vector<T> &arr,lli n) {
 }
 
 template <typename T>
-void output(vector<T> arr) {
+void output_v(vector<T> arr) {
   T temp;
   for(auto x:arr) cout<<x<<" ";
   cout<<endl;
@@ -30,19 +29,6 @@ void input_set(set<T> &arr,lli n) {
 }
 
 
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
-    return x;
-  }
-}
-
 int main() {
   
   ios_base::sync_with_stdio(false);
@@ -51,6 +37,20 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli n,i;
+    cin>>n;
+    vector<lli> arr,output;
+    input(arr,n);
+    for(auto x:arr) {
+      i=upper_bound(all(output),x)-output.begin();
+      if(i==output.size()) {
+        output.push_back(x);
+      } else {
+        output[i]=x;
+      }
+    }
+    cout<<output.size()<<" ";
+    output_v(output);
 	}
 }
+

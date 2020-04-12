@@ -3,11 +3,10 @@
 #include<set>
 #include<algorithm>
 #include<unordered_map>
-#include<cstdlib>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
 using namespace std;
-typedef long long int lli;
+typedef unsigned long long int lli;
 
 template <typename T>
 void input(vector<T> &arr,lli n) {
@@ -35,10 +34,21 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 	
-  lli testcases=100;
-  cout<<100<<endl;
+  lli testcases;
+	cin>>testcases;
 	while(testcases--) {
-    cout<<rand()<<" "<<rand()<<" "<<rand()<<endl;
+    vector<lli> arr;
+    input(arr,3);
+    sort(all(arr));
+    lli a=arr[0],b=arr[1],c=arr[2];
+    --b,c-=2;
+    lli MOD=1000000007;
+    a=a%MOD;
+    b=b%MOD;
+    c=c%MOD;
+    a=(a%MOD*b%MOD)%MOD;
+    a=(a%MOD*c%MOD)%MOD;
+    cout<<a<<endl;
 	}
 }
 

@@ -5,7 +5,6 @@
 #include<unordered_map>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -30,19 +29,6 @@ void input_set(set<T> &arr,lli n) {
 }
 
 
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
-    return x;
-  }
-}
-
 int main() {
   
   ios_base::sync_with_stdio(false);
@@ -51,6 +37,18 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli n;
+    cin>>n;
+    lli time=0;
+    while(n--) {
+      lli x,l,f;
+      cin>>x>>l>>f;
+      time=max(time,x);
+      if((time-x)%f!=0)
+        time+=f-(time-x)%f; // wait for the next train to arrive
+      time+=l;
+    }
+    cout<<time<<endl;
 	}
 }
+

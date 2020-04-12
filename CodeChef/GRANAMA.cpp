@@ -5,7 +5,6 @@
 #include<unordered_map>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -29,18 +28,12 @@ void input_set(set<T> &arr,lli n) {
   for(lli i=0;i<n;i++) cin>>temp, arr.insert(temp);
 }
 
-
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
-    return x;
-  }
+void get_count(unordered_map<char,lli> &mp, string &a){
+  for(auto x:a)
+    if(mp.find(x)!=mp.end())
+      ++mp[x];
+    else
+      mp[x]=1;
 }
 
 int main() {
@@ -51,6 +44,27 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
+    string a,b;
+    cin>>a>>b;
+    unordered_map<char,lli> mp1,mp2;
+    get_count(mp1,a);
+    get_count(mp2,b);
+    bool ans1=true,ans2=true;
+    for(char x='a';x<='z';++x) {
+      if((mp1.find(x)==mp1.end()) and (mp2.find(x)==mp2.end()))
+        continue;
 
+      if((mp1.find(x)!=mp1.end()) and (mp2.find(x)!=mp2.end())) {
+        ans1=ans1 and (mp1[x]==mp2[x]);
+      } else {
+        ans2=false;
+        ans1=false;
+      }
+    }
+    if((ans1 and ans2) or (!ans1 and !ans2))
+      cout<<"YES"<<endl;
+    else
+      cout<<"NO"<<endl;
 	}
 }
+

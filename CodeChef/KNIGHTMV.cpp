@@ -28,13 +28,21 @@ void input_set(set<T> &arr,lli n) {
   for(lli i=0;i<n;i++) cin>>temp, arr.insert(temp);
 }
 
-lli reverse(lli x,lli k) {
-  lli ans=0;
-  for(lli i=0;i<k;i++) {
-    if(x&1LL<<i) {
-      ans=ans|(1LL<<(k-i-1));
-    }
-  }
+bool valid(string inp) {
+  bool ans=true;
+  
+  if(inp.size()!=5)
+    ans=false;
+
+  if(inp[2]!='-')
+    ans=false;
+
+  if( inp[0] > 'h' or inp[0] < 'a' or inp[3] > 'h' or inp[3] < 'a')
+      ans=false;
+  
+  if( inp[1] < '1' or inp[1] > '8' or inp[4] < '1' or inp[4] > '8')
+      ans=false;
+
   return ans;
 }
 
@@ -45,17 +53,21 @@ int main() {
 	
   lli testcases;
 	cin>>testcases;
+  string t;
+  getline(cin,t);
 	while(testcases--) {
-    lli n,i;
     string inp;
-    cin>>n>>inp;
-    char ans[(1LL<<n) +1];
-    for(i=0;i<(1LL<<n);i++) {
-      lli r=reverse(i,n);
-      ans[r]=inp[i];
+    getline(cin,inp);
+   // cout<<"inp is "<<inp<<endl;
+    if(!valid(inp)) {
+      cout<<"Error"<<endl;
+    } else {
+      lli temp=abs(inp[3]-inp[0])*abs(inp[4]-inp[1]);
+      if(temp==2)
+        cout<<"Yes"<<endl;
+      else
+        cout<<"No"<<endl;
     }
-    ans[i]='\0';
-    cout<<ans<<endl;
 	}
 }
 

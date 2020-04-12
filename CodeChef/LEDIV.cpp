@@ -4,8 +4,8 @@
 #include<algorithm>
 #include<unordered_map>
 #include<map>
+#include<math.h>
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -29,18 +29,11 @@ void input_set(set<T> &arr,lli n) {
   for(lli i=0;i<n;i++) cin>>temp, arr.insert(temp);
 }
 
-
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
+lli smallest_factor(lli x) {
+    for(lli i=2;i<=sqrt(x);i++)
+      if(x%i==0)
+        return i;
     return x;
-  }
 }
 
 int main() {
@@ -51,6 +44,18 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-
+    lli n;
+    cin>>n;
+    vector<lli> arr;
+    input(arr,n);
+    lli x=arr[0];
+    for(lli i=1;i<n;i++)
+      x=__gcd(arr[i],x);
+    
+    if(x!=1)
+      cout<<smallest_factor(x)<<endl;
+    else
+      cout<<-1<<endl;
 	}
 }
+

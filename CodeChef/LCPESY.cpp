@@ -5,7 +5,6 @@
 #include<unordered_map>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
-#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -30,19 +29,6 @@ void input_set(set<T> &arr,lli n) {
 }
 
 
-lli power(lli num,lli base) {
-  if(base==0)
-    return 1;
-
-  if(base%2)
-    return (num%MOD*power(num,base-1)%MOD)%MOD;
-  else {
-    lli x=power(num,base/2);
-    x=(x*x)%MOD;
-    return x;
-  }
-}
-
 int main() {
   
   ios_base::sync_with_stdio(false);
@@ -51,6 +37,26 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
+    string a,b;
+    cin>>a>>b;
+    unordered_map<char,lli> mx,my;
 
+    for(auto x:a) {
+      if(mx.find(x)==mx.end()) mx[x]=1;
+      else ++mx[x];
+    }
+
+    for(auto y:b) {
+      if(my.find(y)==my.end()) my[y]=1;
+      else ++my[y];
+    }
+    lli ans=0;
+    for(auto it=mx.begin();it!=mx.end();it++) {
+        char c=(*it).first;
+        if(my.find(c)!=my.end())
+          ans+=min(my[c],mx[c]);
+    }
+    cout<<ans<<endl;
 	}
 }
+
