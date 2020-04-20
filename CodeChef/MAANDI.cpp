@@ -3,7 +3,6 @@
 #include<set>
 #include<algorithm>
 #include<unordered_map>
-#include<limits.h>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
 #define MOD 1000000007
@@ -44,6 +43,19 @@ lli power(lli num,lli base) {
   }
 }
 
+int overlucky(lli x) {
+  bool l=false;
+  bool nl=false;
+  while(x) {
+    int dig=x%10;
+    if(dig==4 or dig==7)
+      nl=true;
+    x=x/10;
+  }
+
+  return nl;
+}
+
 int main() {
   
   ios_base::sync_with_stdio(false);
@@ -52,23 +64,17 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-    lli n,k;
-    vector<lli> arr;
-    cin>>n>>k;
-    input(arr,n);
-    unordered_map<lli,lli> mp;
-    lli mi=LLONG_MAX;
-    for(lli i=0;i<n;i++) {
-      for(lli j=i+1;j<n;j++) {
-        lli x=abs(arr[i]+arr[j]-k);
-        if(mp.find(x)!=mp.end())
-          mp[x]++;
-        else
-          mp[x]=1;
-        mi=min(mi,x);
+    lli n;
+    lli count=0;
+    cin>>n;
+    for(lli i=1;i*i<=n;i++) {
+      if(n%i==0) {
+        count+=overlucky(i);
+        if(i!=(n/i)) 
+          count+=overlucky(n/i);
       }
     }
-    cout<<mi<<" "<<mp[mi]<<endl;
+    cout<<count<<endl;
 	}
 }
 

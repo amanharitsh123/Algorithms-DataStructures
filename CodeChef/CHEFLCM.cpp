@@ -1,10 +1,12 @@
 #include<iostream>
+#include <memory>
 #include<vector>
 #include<set>
 #include<algorithm>
 #include<unordered_map>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
+#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -29,6 +31,19 @@ void input_set(set<T> &arr,lli n) {
 }
 
 
+lli power(lli num,lli base) {
+  if(base==0)
+    return 1;
+
+  if(base%2)
+    return (num%MOD*power(num,base-1)%MOD)%MOD;
+  else {
+    lli x=power(num,base/2);
+    x=(x*x)%MOD;
+    return x;
+  }
+}
+
 int main() {
   
   ios_base::sync_with_stdio(false);
@@ -37,24 +52,24 @@ int main() {
   lli testcases;
 	cin>>testcases;
 	while(testcases--) {
-    lli k=0;
-    cin>>k;
-    if(k!=0)
-      cout<<"3.";
-    else
-      cout<<"3";
-    lli a=103993,b=33102;
-    a=a-3*b;
-    while(k--) {
-      a=a*10;
-      if(a<b) {
-        cout<<0;
-      } else {
-        cout<<a/b;
-        a=a-(a/b)*b;
+    lli n;
+    cin>>n;
+    if(n==1) {
+      cout<<1<<endl;
+      continue;
+    }
+
+    bool ans=false;
+    lli aa=0;
+    for(lli i=1;i*i<=n;i++) {
+      if(n%i==0) {
+        aa+=n/i;
+        if(i!=(n/i))
+          aa+=i;
       }
     }
-    cout<<endl;
+
+    cout<<aa<<endl;
 	}
 }
 
