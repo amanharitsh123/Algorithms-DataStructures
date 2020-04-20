@@ -5,19 +5,7 @@
 #include<unordered_map>
 #include<map>
 #define all(arr) arr.begin(),arr.end()
-#define f first
-#define s second
-#define debug1(x) cout<<x<<"\n"
-#define debug2(x,y) cout<<x<<" "<<y<<"\n"
-#define debug3(x,y,z) cout<<x<<" "<<y<<" "<<z<<"\n"
-#define nl cout<<"\n";
-#define pq priority_queue
-#define inf 0x3f3f3f3f
-#define test cout<<"abcd\n";
-#define pi pair<int,int>
-#define pii pair<int,pi>
-#define pb push_back
-
+#define MOD 1000000007
 using namespace std;
 typedef long long int lli;
 
@@ -29,6 +17,7 @@ void input(vector<T> &arr,lli n) {
 
 template <typename T>
 void output(vector<T> arr) {
+  T temp;
   for(auto x:arr) cout<<x<<" ";
   cout<<endl;
 }
@@ -41,14 +30,42 @@ void input_set(set<T> &arr,lli n) {
 }
 
 
+lli power(lli num,lli base) {
+  if(base==0)
+    return 1;
+
+  if(base%2)
+    return (num%MOD*power(num,base-1)%MOD)%MOD;
+  else {
+    lli x=power(num,base/2);
+    x=(x*x)%MOD;
+    return x;
+  }
+}
+
 int main() {
   
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
-
+	
   lli testcases;
-  cin>>testcases;
-  while(testcases--) {
+	cin>>testcases;
+	while(testcases--) {
+    lli n;
+    vector<lli> arr;
+    cin>>n;
+    for(lli i=1;i<=n-2;i+=2) {
+      cout<<i+1<<" ";;
+      if(i+1<=n-2)
+        cout<<i<<" ";
+    }
 
+    if(n%2) {
+      arr.pop_back();
+      arr.pop_back();
+      arr.push_back(n);
+      swap(arr[n-2],arr[n-1]);
+    }
+    output(arr);
   }
 }
