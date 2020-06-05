@@ -47,41 +47,9 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases,ttt=0;
+  lli testcases;
   cin>>testcases;
   while(testcases--) {
-    ++ttt;
-    lli N,K,P;
-    cin>>N>>K>>P;
-    lli mat[N][K];
-    for(lli i=0;i<N;i++)
-      for(lli j=0;j<K;j++)
-        cin>>mat[i][j];
 
-    lli dp[N+1][P+1];
-    dp[0][0]=0;
-    for(lli p=0;p<=P;p++) {
-      for(lli i=1;i<=N;i++) {
-        lli sum=0;
-        lli count=0;
-        dp[i][count]=0;
-        dp[i][p]=0;
-        for(auto x:mat[i-1]) {
-          ++count;
-          if(count>p)
-            break;
-          sum+=x;
-          if(p<=(i-1)*K)
-            dp[i][p]=max(dp[i][p],dp[i-1][p]);
- 
-          if((p-count)<=(i-1)*K)
-            dp[i][p]=max(dp[i][p],sum+dp[i-1][p-count]);
-
-       }
-      }
-    }
-    //cout<<dp[1][3]<<endl;
-    kick(ttt,dp[N][P]);
   }
 }
-
