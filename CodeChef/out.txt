@@ -1,0 +1,40 @@
+0
+0
+2
+2
+correct
+0
+correct
+0
+correct
+3
+correct
+3
+correct
+0
+correct
+0
+correct
+4
+correct
+4
+correct
+0
+correct
+0
+correct
+5
+correct
+5
+correct
+0
+correct
+0
+correct
+6
+correct
+6
+offsets 14 0 
+Wrong answer 20
+Correct answer 112
+Your answer 6
