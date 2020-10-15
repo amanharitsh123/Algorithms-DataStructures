@@ -86,46 +86,44 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
+lli cnt(vector<lli> &arr) {
+  int ans=0;
+  int n=arr.size();
+  for(int i=1; i<n-1; i++) {
+    if(arr[i]<arr[i-1] and arr[i]<arr[i+1])
+      ++ans;
   }
-  return last+1;
+  return ans;
 }
 void solve() {
   int n;
   cin >> n;
-  vector<lli> arr, lock;
+  vector<lli> arr;
   input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
-  }
-  sort(all(non_lock), greater<lli> () );
+  vector<lli> ans(n, 0);
   int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
+  sort(all(arr));
+  for(int i=1; i<n; i+=2) {
+    ans[i]=arr[j];
+    ++j;
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
+  j=n-1;
+  for(int i=0; i<n; i+=2) {
+    ans[i]=arr[j];
+    j--;
+  }
+  vector<lli> temp=ans;
+  j=n/2;
+  for(int i=0; i<n; i+=2) {
+    ans[i]=arr[j];
+    j++;
+  }
+  if(cnt(temp)>cnt(ans)) {
+    cout << cnt(temp) << endl;
+    output(temp);
+  } else {
+    cout << cnt(ans) << endl;
+    output(ans);
   }
 }
 
@@ -134,10 +132,8 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }
 }
-

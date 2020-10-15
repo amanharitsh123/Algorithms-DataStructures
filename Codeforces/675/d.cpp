@@ -4,7 +4,7 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-
+#include<queue>
 using namespace std;
 typedef long long int lli;
 
@@ -60,7 +60,7 @@ void input(vector<T> &arr,lli n) {
 
 template <typename T>
 void output(vector<T> arr) {
-  for(auto x:arr) cout<<x<<" ";
+  for(auto x:arr) cout<<x.x << space << x.y<<" ";
   cout<<endl;
 }
 
@@ -86,47 +86,92 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
+struct coordx {
+  lli x, y;
+  bool operator<(const coordx& o) const{
+    if(x!=o.x)
+      return x<o.x;
+    return y<o.y;
   }
-  return last+1;
-}
+bool operator==(const coordx &p) const
+	{
+		return x == p.x && y == p.y;
+	}
+  lli operator-(const coordx& o) {
+    return abs(o.x-x)+abs(o.y-y);
+  }
+};
+
+struct coordy {
+  lli x, y;
+  bool operator<(const coordy& o) const{
+    if(x!=o.x)
+      return x<o.x;
+    return y<o.y;
+  }
+bool operator==(const coordy &p) const
+	{
+		return x == p.x && y == p.y;
+	}
+  lli operator-(const coordy& o) {
+    return abs(o.x-x)+abs(o.y-y);
+  }
+};
+
 void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+  lli n, m;
+  cin >> n >> m;
+  lli sx, sy, fx, fy;
+  cin >> sx >> sy >> fx >> fy;
+  vector<coordx> arrx;
+  vector<coordy> arry;
+  vector<vector<pl> > adj;
+  lli x, y;
+  map<coordx, int> number;
+  arrx={{sx,sy}};
+  for(int i=0; i<m; i++) {
+    cin >> x >> y;
+    arrx.push_back({x, y});
+    arry.push_back({x, y});
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
+  sortall(arrx);
+  sortall(arry);
+  for(int i=1; i<=m; i++) {
+    
+  }
+  priority_queue< pair<lli, coord> > q;
+  lli ans=1e18;
+  q.push({0, {sx, sy}});
+  coord dest={fx, fy};
+  output(arr);
+  while(q.size()) {
+    auto top=q.top();
+    q.pop();
+    cout <<top.first<<space<<top.second.x << space << top.second.y << endl;
+    ans=min(ans, abs(top.second.x-dest.x)+abs(top.second.x-dest.y)+top.first);
+    auto left=upper_bound(arr.begin(), arr.end(), (coord) top.second)-arr.begin();
+    cout << "left is " << left << endl;
+    if(left!=arr.size()) {
+      lli x=arr[left].x;
+      lli i=left;
+      while(i<arr.size() and arr[i].x==x and visited[arr[i]]==false) {
+        q.push({arr[i]-top.second+top.first, arr[i]});
+        visited[arr[i]]=true;
+        i++;
+      }
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
+    left=lower_bound(arr.begin(), arr.end(), (coord) top.second)-arr.begin()-1;
+    if(left!=-1) {
+      lli x=arr[left].x;
+      lli i=left;
+      while(i>=0 and arr[i].x==x and visited[arr[i]]==false) {
+        q.push({arr[i]-top.second+top.first, arr[i]});
+        visited[arr[i]]=true;
+        i--;
+      }
     }
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << ans << endl;
 }
 
 int main() {
@@ -134,8 +179,7 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }

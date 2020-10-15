@@ -86,47 +86,52 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
 void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
+  lli w, h, n, m;
+  cin >> w >> h >> n >> m;
+  vector<lli> xpoints, ypoints;
+  input(ypoints, n);
+  input(xpoints, m);
+  map<lli, bool> ylengths, processed_areas;
   for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
-  }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
+    for(int j=0; j<n; j++) {
+      lli len=abs(ypoints[i]-ypoints[j]);
+      if(len==0)
+        continue;
+      ylengths[len]=true;
     }
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
+  lli count=0;
+  for(int i=0; i<m; i++) {
+    for(int j=0; j<m; j++) {
+      lli len=abs(xpoints[i]-xpoints[j]);
+      if(len==0)
+        continue;
+      if(ylengths[len] and !processed_areas[len]) {
+        ++count;
+        processed_areas[len]=true;
+      }
+    }
   }
+  lli ma=0, curmax=0;
+  for(lli hh=0; hh<=h; hh++) {
+    curmax=0;
+    map<lli, bool> curprocessed;
+    for(lli i=0; i<m; i++) {
+      lli len=abs(hh-xpoints[i]);
+      if(len==0) {
+        curmax=0;
+        break;
+      }
+       if(ylengths[len] and !processed_areas[len] and !curprocessed[len]) {
+        ++curmax;
+        curprocessed[len]=true;
+      }
+    }
+    ma=max(ma, curmax);
+  }
+
+  cout << count+ma << endl;
 }
 
 int main() {
@@ -134,8 +139,7 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }

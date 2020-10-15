@@ -43,7 +43,8 @@ typedef long long int lli;
 #define MOD 1000000007
 #define space ' '
 #define kick(t) cout << "Case #" << t << ":" << endl;
-
+#define maxima(l) arr[l]>arr[l-1] and arr[l]>arr[l+1]
+#define minima(l) arr[l]<arr[l-1] and arr[l]<arr[l+1]
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
 typedef vector<ll>		vl;
@@ -86,46 +87,56 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
 void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
+  lli n, q, l, r;
+  cin >> n >> q;
+  vector<lli> arr={-inf};
   input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+  arr.pb(-inf);
+  lli max_sum=0, min_sum=0;
+  for(int i=1; i<=n; i++) {
+    if(arr[i]>arr[i-1] and arr[i]>arr[i+1])
+      max_sum+=arr[i];
+    if(arr[i]<arr[i-1] and arr[i]<arr[i+1])
+      min_sum+=arr[i];
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
+  cout << max_sum-min_sum << endl;
+  for(int tt=0; tt<q; tt++) {
+    cin >> l >> r;
+    map<lli, bool> processed;
+    for(lli L=l-1; L<=l+1; L++) {
+      if(minima(L))
+        min_sum-=arr[L];
+      if(maxima(L))
+        max_sum-=arr[L];
+      processed[L]=true;
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
+    for(lli R=r-1; R<=r+1; R++) {
+      if(processed[R])
+        continue;
+      if(minima(R))
+        min_sum-=arr[R];
+      if(maxima(R))
+        max_sum-=arr[R];
     }
-  }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
+    swap(arr[r], arr[l]);
+    for(lli L=l-1; L<=l+1; L++) {
+      if(minima(L))
+        min_sum+=arr[L];
+      if(maxima(L))
+        max_sum+=arr[L];
+      processed[L]=true;
+    }
+    for(lli R=r-1; R<=r+1; R++) {
+      if(processed[R])
+        continue;
+      if(minima(R))
+        min_sum+=arr[R];
+      if(maxima(R))
+        max_sum+=arr[R];
+      processed[R]=true;
+    }
+    cout << max_sum-min_sum << endl;
   }
 }
 

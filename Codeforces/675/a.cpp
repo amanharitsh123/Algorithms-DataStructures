@@ -4,7 +4,7 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-
+#include<math.h>
 using namespace std;
 typedef long long int lli;
 
@@ -86,48 +86,54 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
+bool perfect_square(lli x) {
+  lli s=sqrt(x);
+  return s*s==x;
+}
+lli foo(vector<lli> arr) {
+  lli ans=1e18;
+  lli curans=0;
+  for(auto x:arr){
+    curans=0;
+    for(auto y:arr)
+      curans+=abs(x-y);
+    ans=min(ans, curans);
   }
-  return last+1;
+  return ans;
 }
 void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
-  }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
+  int n, m;
+  cin >> n >> m;
+  vector<vector<lli> > mat(n, vector<lli> (m, 0));
+  for(int i=0; i<n; i++) for(int j=0; j<m; j++) cin >> mat[i][j];
+  int max_n=n/2;
+  int max_m=m/2;
+  if(n%2==0)
+    max_n--;
+  if(m%2==0)
+    max_m--;
+  lli ans=0;
+  for(int i=0; i<=max_n; i++) {
+    for(int j=0; j<=max_m; j++) {
+      lli top=mat[i][j];
+      lli bottom=mat[n-i-1][j];
+      lli tright=mat[i][m-j-1];
+      lli bright=mat[n-i-1][m-j-1];
+      if(i==n-i-1 and j==m-j-1) {
+        ans+=foo({top, tright});
+      } else if(i==n-1-i) {
+        ans+=foo({top, tright});
+      } else if(j==m-1-j){
+        ans+=foo({top, bottom});
+      } else {
+        ans+=foo({top, bottom, tright, bright});
+      }
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << ans << endl;
 }
+
+
 
 int main() {
   

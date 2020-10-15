@@ -43,7 +43,8 @@ typedef long long int lli;
 #define MOD 1000000007
 #define space ' '
 #define kick(t) cout << "Case #" << t << ":" << endl;
-
+#define sub(a, b) (MOD+a%MOD-b%MOD)%MOD
+#define add(a, b) (MOD+a%MOD+b%MOD)%MOD
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
 typedef vector<ll>		vl;
@@ -86,47 +87,14 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
+
 void solve() {
-  int n;
+  lli n;
   cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
-  }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
-  }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  lli ans=power(10, n);
+  ans=sub(ans, mul(2, power(9, n)));
+  ans=add(ans, power(8, n));
+  cout << ans << endl;
 }
 
 int main() {
@@ -135,7 +103,7 @@ int main() {
   cin.tie(NULL);
 
   lli testcases;
-  cin>>testcases;
+  testcases=1;
   while(testcases--) {
     solve();
   }

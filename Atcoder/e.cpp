@@ -85,48 +85,27 @@ lli power(lli a,lli b) {
   }
   return ans;
 }
+bool cmp1(pl a, pl b) {
+  return a.first<b.first;
+}
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
+bool cmp2(pl a, pl b) {
+  return a.second < b.second;
 }
 void solve() {
   int n;
   cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
+  vector<pl> s;
   for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+    lli u, v;
+    cin >> u >> v;
+    s.pb({u+v, u-v});
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
-  }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  sort(all(s), cmp1);
+  lli ans=s[n-1].first-s[0].first;
+  sort(all(s), cmp2);
+  ans=max(ans, s[n-1].second-s[0].second);
+  cout << ans << endl;
 }
 
 int main() {
@@ -134,8 +113,7 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }

@@ -86,47 +86,23 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
 void solve() {
-  int n;
+  lli n;
   cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+  lli lo=0, hi=n;
+  while(lo<hi) {
+    lli mid=(lo+hi)/2;
+    lli sum=mid/2+1;
+    if(mid%2==0)
+      sum+=(mid/2+1)*(mid/2);
+    else
+      sum+=(mid/2+1)*(mid/2+1);
+    if(sum>=n)
+      hi=mid;
+    else
+      lo=mid+1;
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
-  }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << lo << endl;
 }
 
 int main() {

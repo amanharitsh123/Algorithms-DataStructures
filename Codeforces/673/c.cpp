@@ -86,47 +86,38 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
 void solve() {
   int n;
+  vector<int> arr;
   cin >> n;
-  vector<lli> arr, lock;
   input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
+  vector<int> ans(n, inf);
+  map<int, vector<int> > mp;
   for(int i=0; i<n; i++) {
-    if(lock[i])
+    mp[arr[i]].pb(i);
+  }
+  for(int i=1; i<=n; i++) {
+    int mi=0;
+    int prev=-1, next=n;
+    for(int j=0; j<mp[i].size(); j++) {
+      if(j+1==mp[i].size())
+        next=n;
+      else
+        next=mp[i][j+1];
+      int x=mp[i][j];
+      mi=max(mi, max(x-prev, next-x));
+      prev=x;
+    }
+    if(mi==0)
       continue;
-    non_lock.pb(arr[i]);
+    ans[mi-1]=min(ans[mi-1], i);
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
-  }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  int i=0;
+  while(ans[i]==inf and i<ans.size())
+    ans[i]=-1, i++;
+  for(int j=i+1; j<ans.size(); j++)
+    ans[j]=min(ans[j], ans[j-1]);
+  output(ans);
 }
 
 int main() {

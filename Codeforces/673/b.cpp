@@ -86,47 +86,54 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
 void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
+  lli n, t;
+  cin >> n >> t;
+  vector<lli> arr;
   input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
+  lli cnt=0;
+  set<lli> s;
+  for(auto x:arr) {
+    if(x==(t/2) and t%2==0)
+      ++cnt;
+    s.insert(x);
+  }
+  if(cnt%2)
+    cnt=cnt/2+1;
+  else
+    cnt/=2;
+  vector<lli> temp;
+  for(auto x:s)
+    temp.pb(x);
+  map<lli, lli> mp;
+  int i=0, j=(int) temp.size()-1;
+  while(i<j) {
+    if(temp[i]+temp[j]==t) {
+      mp[temp[j]]=1;
+      ++i, --j;
+    } else if(temp[i]+temp[j]<t)
+      ++i;
+    else
+      --j;
+  }
+  lli target=t/2;
+  if(t%2)
+    target=-1;
+  for(auto x:arr) {
+    if(x==target and cnt) {
+        cout << 1 << space;
+        cnt--;
+        continue;
+    } else if(x==target) {
+      cout << 0 << space;
       continue;
-    non_lock.pb(arr[i]);
-  }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
+    if(mp[x])
+      cout << 1 << space;
+    else
+      cout << 0 << space;
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << endl;
 }
 
 int main() {

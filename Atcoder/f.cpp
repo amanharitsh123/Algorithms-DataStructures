@@ -1,6 +1,6 @@
 #include<iostream>
 #include<vector>
-#include<map>
+#include<unordered_map>
 #include<algorithm>
 #include<set>
 #include<cstring>
@@ -86,47 +86,36 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
+bool cmp(pl a, pl b) {
+  return a.second>=b.second;
 }
 void solve() {
   int n;
   cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
+  vector<lli> a;
+  unordered_map<lli, lli> m1, m2;
+  lli temp;
+  bool possible=true;
+  input(a, n);
+  lli max_num=-1, cnt=-1;
   for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+    m1[a[i]]+=1;
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
+  for(int i=0; i<n and possible; i++) {
+    cin >> temp;
+    m2[temp]+=1;
+    if(m2[temp]+m1[temp]>n)
+      possible=false;
+    if(m2[temp]>cnt) {
+      cnt=m2[temp];
+      max_num=temp;
     }
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
+  if(!possible) {
+    cout << "No" << endl;
+    return;
   }
+  cout << "Yes" << endl;
 }
 
 int main() {
@@ -134,8 +123,7 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }

@@ -4,6 +4,7 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
+#include<stack>
 
 using namespace std;
 typedef long long int lli;
@@ -86,47 +87,86 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
+vector<vector<int> > min_index_right, max_index_right, min_index_left, max_index_left;
+vector<lli> arr;
+int n;
+
+void cal_min() {
+  stack<int> s;
+  s.push(n-1);
+  for(int i=n-2; i>=0; i--) {
+    while(s.size() and arr[i]>arr[s.top()])
+      s.pop();
+    if(s.size())
+      min_index_right[s.top()].pb(i);
+    s.push(i);
   }
-  return last+1;
 }
+
+void cal_max() {
+  stack<int> s;
+  s.push(n-1);
+  for(int i=n-2; i>=0; i--) {
+    while(s.size() and arr[i]<arr[s.top()])
+      s.pop();
+    if(s.size())
+      max_index_right[s.top()].pb(i);
+    s.push(i);
+  }
+}
+
+
+void cal_min1() {
+  stack<int> s;
+  s.push(0);
+  for(int i=1; i<n; i++) {
+    while(s.size() and arr[i]>arr[s.top()])
+      s.pop();
+    if(s.size())
+      min_index_left[i].pb(s.top());
+    s.push(i);
+  }
+}
+
+void cal_max1() {
+  stack<int> s;
+  s.push(0);
+  for(int i=1; i<n; i++) {
+    while(s.size() and arr[i]<arr[s.top()])
+      s.pop();
+    if(s.size())
+      max_index_left[i].pb(s.top());
+    s.push(i);
+  }
+}
+
+
 void solve() {
-  int n;
   cin >> n;
-  vector<lli> arr, lock;
   input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+  min_index_right.resize(n);
+  max_index_right.resize(n);
+  min_index_left.resize(n);
+  max_index_left.resize(n);
+  cal_min();
+  cal_max();
+  cal_min1();
+  cal_max1();
+  vector<int> dp(n, inf);
+  dp[0]=0;
+  for(int i=1; i<n; i++) {
+    dp[i]=dp[i-1]+1;
+    for(auto x:min_index_right[i])
+      dp[i]=min(dp[i], dp[x]+1);
+    for(auto x:max_index_right[i])
+      dp[i]=min(dp[i], dp[x]+1);
+    for(auto x:min_index_left[i])
+      dp[i]=min(dp[i], dp[x]+1);
+    for(auto x:max_index_left[i])
+      dp[i]=min(dp[i], dp[x]+1);
+
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
-  }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << dp[n-1] << endl;
 }
 
 int main() {
@@ -134,8 +174,7 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }

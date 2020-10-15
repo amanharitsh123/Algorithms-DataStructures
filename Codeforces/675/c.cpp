@@ -43,7 +43,7 @@ typedef long long int lli;
 #define MOD 1000000007
 #define space ' '
 #define kick(t) cout << "Case #" << t << ":" << endl;
-
+#define add(x, y) (x%MOD+y%MOD)%MOD
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
 typedef vector<ll>		vl;
@@ -86,47 +86,41 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
+lli foo(lli i) {
+  lli x=i*(i+1LL);
+  x/=2;
+  return x;
 }
+
+lli foo2(lli i) {
+  lli x=power(10, i+1);
+  x=x+MOD-1;
+  x%=MOD;
+  return mul(x, power(9, MOD-2));
+}
+
 void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
+  string inp;
+  cin >> inp;
+  lli ans=0;
+  lli  n=inp.size();
+  lli sub=0;
+  vector<lli> prefix(100002, 0);
+  prefix[0]=0;
+  for(int i=1; i<100002; i++) {
+    prefix[i]=add(prefix[i-1], mul(i, power(10, i-1)));
+  }
   for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+    sub=add(mul(sub, 10), inp[i]-'0');
+    // remove some part from both
+    // remove all from front
+    ans=add(ans, mul(inp[i]-'0', mul(1, prefix[n-1-i])));
+    ans=add(ans, mul(inp[i]-'0', mul(foo(i), power(10, n-i-1))));
+    //ans=add(ans, mul(inp[i]-'0', mul(power(2, i)+MOD-1LL, (power(11, n-1-i)+MOD-power(10, n-1-i))%MOD)));
+    //ans=add(ans, mul(inp[i]-'0', mul(1, (power(11, n-1-i)+MOD-power(10, n-1-i))%MOD)));
+    //ans=add(ans, mul(inp[i]-'0', mul(power(2, i)+MOD-1LL, power(10, n-1-i))));
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
-  }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << ans << endl;
 }
 
 int main() {
@@ -134,8 +128,7 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }

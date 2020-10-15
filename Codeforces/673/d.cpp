@@ -86,47 +86,65 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
 void solve() {
+  bool possible=true;
   int n;
   cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
+  vector<int> arr(n);
+  lli sum=0;
   for(int i=0; i<n; i++) {
-    if(lock[i])
+    cin >> arr[i];
+    sum+=arr[i];
+  }
+  possible=possible and (sum%n==0);
+  lli target=(sum/n);
+  vector< vector<lli> > ans;
+  vector<pl> remaining;
+  for(int i=1; i<n; i++) {
+    lli x=arr[i]/(i+1);
+    if(1) {
+      remaining.pb({i+1-arr[i]%(i+1), i});
       continue;
-    non_lock.pb(arr[i]);
-  }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
+    ans.pb({i+1, 1LL, x});
+    arr[i]-=x*(i+1);
+    arr[0]+=x*(i+1);
   }
-  if(fk(arr)<fk(arr2))
+  sortall(remaining);
+  //cout << "ans size till now " << ans.size() << endl;
+  for(auto item:remaining) {
     output(arr);
-  else {
-    output(arr2);
+    cout << "requirement is " << item.first << endl;
+    if(arr[0]<item.first) {
+      possible=false;
+      cout << "here" << endl;
+      break;
+    }
+    ans.pb({1LL, item.second+1, item.first});
+    ans.pb({item.second+1, 1LL, (arr[item.second]+item.first)/(item.second+1)});
+    arr[0]+=arr[item.second];
+    arr[item.second]=0;
   }
+  cout << "target is " << target<<space<<possible << endl;
+  output(arr);
+  for(lli i=1; i<n; i++) {
+    lli diff=target-arr[i];
+    if(diff<0 or arr[0]<diff) {
+      possible=false;
+      //cout << "possible error" << endl;
+    }
+    ans.pb({1LL, i+1, diff});
+    arr[i]+=diff;
+    arr[0]-=diff;
+  }
+  //output(arr);
+  if(!possible) {
+    cout << -1 << endl;
+    return;
+  }
+  cout << ans.size() << endl;
+  for(auto x:ans)
+    output(x);
 }
 
 int main() {

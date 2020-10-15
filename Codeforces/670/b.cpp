@@ -86,47 +86,42 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
 void solve() {
   int n;
   cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
+  vector<int> arr;
+  int temp;
+  int cntpos=0, cntzero=0;
   for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+    cin >> temp;
+    arr.pb(temp);
+    if(temp==0)
+      cntzero++;
+    else if(temp>0)
+      cntpos++;
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
+  lli ans=-1e18;
+  sort(all(arr));
+  if((n-cntzero)<5) {
+    cout << 0 << endl;
+    return;
+  } else if(cntpos==0) {
+    int i=n-1;
+    int five=5;
+    ans=1;
+    while(five--)
+      ans=ans*arr[i], i--;
+  } else {
+    for(int cnt=0; cnt<=5; cnt++) {
+      lli curans=1;
+      for(int i=n-1; i>=n-cnt; i--)
+        curans*=arr[i];
+      for(int i=0; i<5-cnt; i++)
+        curans*=arr[i];
+      ans=max(ans, curans);
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << ans << endl;
 }
 
 int main() {

@@ -86,46 +86,74 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
-void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
+vector<vector<int> > adj;
+vector<int> size_tree;
+int count_centroids=0, n=0;
+int max_size=inf;
+vector<int> found_centroids;
+void dfs(int src, int parent) {
+  int curmax=0;
+  for(auto v:adj[src]) {
+    if(v==parent)
       continue;
-    non_lock.pb(arr[i]);
+    dfs(v, src);
+    size_tree[src]+=size_tree[v];
+    curmax=max(curmax, size_tree[v]);
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
+  size_tree[src]++;
+  curmax=max(curmax, n-size_tree[src]);
+  if(curmax==max_size) {
+    ++count_centroids;
+    found_centroids.pb(src);
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
+  else if(curmax<max_size) {
+    found_centroids={src};
+    count_centroids=1;
+  }
+  max_size=min(max_size, curmax);
+}
+
+int fl(int src, int parent) {
+  int l=-1;
+  if(adj[src].size()==1)
+    return src;
+  for(auto v:adj[src]) {
+    if(v==parent)
+      continue;
+    l=fl(v, src);
+  }
+  return l;
+}
+
+void leaves_shift() {
+  int l=fl(found_centroids[1], found_centroids[0]);
+  cout << l+1 << space <<adj[l][0]+1 << endl;
+  cout << found_centroids[0]+1 << space << l+1 << endl;
+}
+
+void solve() {
+  // find centroids but how? 
+  // In O(n)
+  // using dfs
+  int u, v;
+  cin >> n;
+  adj.clear();
+  adj.resize(n);
+  size_tree.clear();
+  size_tree.resize(n, 0);
+  max_size=inf;
+  found_centroids.clear();
+  for(int i=0; i<n-1; i++) {
+    cin >> u >> v, --u, --v;
+    adj[u].pb(v);
+    adj[v].pb(u);
+  }
+  dfs(0, -1);
+  if(found_centroids.size()==1) {
+    cout << 1 <<space<<adj[0][0]+1 << endl;
+    cout << 1 <<space<<adj[0][0]+1 << endl;
+  } else {
+    leaves_shift();
   }
 }
 

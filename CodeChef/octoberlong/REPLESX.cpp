@@ -86,47 +86,49 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
-}
 void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+  int n, x, p, k;
+  cin >> n >> x >> p >> k;
+  vector<lli> A={-1LL*(lli)1e18};
+  input(A, n);
+  A.pb(1e18);
+  sortall(A);
+  lli moves=0;
+  if(A[p]==x) {
+    cout << 0 << endl;
+    return;
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
+
+  // Impossible case
+  if((p<k and A[p]<x) or (p>k and A[p]>x)) {
+    cout << -1 << endl;
+    return;
+  }
+
+  if(p<k) {
+    int cur=p-1;
+    while(cur>0 and A[cur]>x)
+      --cur;
+    moves=p-cur;
+  } else if(p>k) {
+    int cur=p+1;
+    while(cur<=n and A[cur]<x)
+      ++cur;
+    moves=cur-p;
+  } else {
+    if(A[p]>x) {
+      int cur=p-1;
+      while(cur>0 and A[cur]>x)
+        --cur;
+      moves=p-cur;
+    } else {
+      int cur=p+1;
+      while(cur<=n and A[cur]<x)
+        ++cur;
+      moves=cur-p;
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << moves << endl;
 }
 
 int main() {

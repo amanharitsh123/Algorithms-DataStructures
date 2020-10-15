@@ -86,46 +86,75 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
+int n;
+vector<lli> arr;
+vector<lli> diff;
+lli pos_diff=0, neg_diff=0;
+
+void find_max() {
+  lli lo=-1e18, hi=1e18;
+  while(lo<=hi) {
+    lli mid=(lo+hi)/2;
+    lli target=arr[0]-mid+pos_diff;
+    if(mid==target) {
+      cout << mid << endl;
+      return;
+    } else if(mid<target) {
+      lo=mid+1;
+    } else {
+      hi=mid-1;
+    }
   }
-  return last+1;
+  cout << max(lo, arr[0]-lo+pos_diff) << endl;
 }
+
 void solve() {
-  int n;
   cin >> n;
-  vector<lli> arr, lock;
   input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+  for(int i=1; i<n; i++) {
+    if(arr[i]>=arr[i-1])
+      pos_diff+=arr[i]-arr[i-1];
+    else
+      neg_diff+=arr[i-1]-arr[i];
+    diff.pb(arr[i]-arr[i-1]);
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
+  find_max();
+  int q;
+  cin >> q;
+  for(int i=0; i<q; i++) {
+    lli l, r, x;
+    cin >> l >> r >> x;
+    if(l==1)
+      arr[0]+=x;
+    l-=2;
+    if(l!=-1) {
+      lli prevdiff=diff[l];
+      lli newdiff=diff[l]+x;
+      if(prevdiff<0)
+        neg_diff+=prevdiff;
+      else
+        pos_diff-=prevdiff;
+      if(newdiff>=0)
+        pos_diff+=newdiff;
+      else
+        neg_diff-=newdiff;
+      diff[l]+=x;
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
+    r-=1;
+    if(r!=diff.size() and r+1<arr.size()) {
+      lli prevdiff=diff[r];
+      lli newdiff=diff[r]-x;
+      if(prevdiff<0)
+        neg_diff+=prevdiff;
+      else
+        pos_diff-=prevdiff;
+      if(newdiff>=0)
+        pos_diff+=newdiff;
+      else
+        neg_diff-=newdiff;
+      diff[r]-=x;
     }
-  }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
+    find_max();
   }
 }
 
@@ -134,10 +163,8 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }
 }
-

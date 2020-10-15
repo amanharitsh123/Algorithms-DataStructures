@@ -40,10 +40,10 @@ typedef long long int lli;
 #define sortall(x) sort(all(x))
 #define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define PI 3.1415926535897932384626
-#define MOD 1000000007
+#define MOD 998244353
 #define space ' '
 #define kick(t) cout << "Case #" << t << ":" << endl;
-
+#define add(x, y) (x%MOD+y%MOD)%MOD
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
 typedef vector<ll>		vl;
@@ -86,47 +86,42 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
+
+#define N 400001
+vector<lli> factorial(N);
+vector<lli> inverse(N);
+lli nck(lli n, lli k) {
+  if(k>n)
+    return 0;
+  lli ans=mul(factorial[n], inverse[n-k]);
+  ans=mul(ans, inverse[k]);
+  return ans;
 }
+
 void solve() {
-  int n;
-  cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
+  lli n, k;
+  cin >> n >> k;
+  vector<lli> on, off;
+  lli l, q;
   for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+    cin >> l >> q;
+    on.pb(l);
+    off.pb(q);
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
+  sortall(on);
+  sortall(off);
+  int i=0, j=0;
+  lli cnt=0;
+  lli ans=0;
+  while(j<n) {
+    while(i<n and on[i]<=off[j]) {
+      cnt++, i++;
     }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
+    ans=add(ans, nck(cnt-1, k-1));
+    j++;
+    cnt--;
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  cout << ans << endl;
 }
 
 int main() {
@@ -134,8 +129,14 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
+  // precompute
+  factorial[0]=1;
+  inverse[0]=1;
+  for(int i=1; i<=N; i++) {
+    factorial[i]=mul(i, factorial[i-1]);
+    inverse[i]=power(factorial[i], MOD-2);
+  }
   while(testcases--) {
     solve();
   }

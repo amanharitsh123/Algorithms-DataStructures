@@ -85,48 +85,54 @@ lli power(lli a,lli b) {
   }
   return ans;
 }
-
-int fk(vector<lli> arr) {
-  int last=-1;
-  lli sum=0;
-  for(int i=0; i<arr.size(); i++) {
-    sum+=arr[i];
-    if(sum<0)
-      last=i;
-  }
-  return last+1;
+bool win(int a, int b) {
+  if(a==0 and b==2)
+    return true;
+  if(a==1 and b==0)
+    return true;
+  if(a==2 and b==1)
+    return true;
+  return false;
 }
+
 void solve() {
-  int n;
+  lli n, count;
+  vector<pl> alice, bob;
   cin >> n;
-  vector<lli> arr, lock;
-  input(arr, n);
-  input(lock, n);
-  vector<lli> non_lock;
-  for(int i=0; i<n; i++) {
-    if(lock[i])
-      continue;
-    non_lock.pb(arr[i]);
+  lli ma=-1e18, mi=1e18;
+  for(int i=0; i<3; i++) {
+    cin >> count;
+    alice.pb({i, count});
   }
-  sort(all(non_lock), greater<lli> () );
-  int j=0;
-  vector<lli> arr2=arr;
-  int j2=non_lock.size()-1;
-  for(int i=0; i<n; i++) {
-    if(!lock[i]) {
-      arr[i]=non_lock[j];
-      j++;
-    }
-    if(!lock[n-i-1]) {
-      arr2[n-i-1]=non_lock[j2];
-      j2--;
-    }
+  for(int i=0; i<3; i++) {
+    cin >> count;
+    bob.pb({i, count});
   }
-  if(fk(arr)<fk(arr2))
-    output(arr);
-  else {
-    output(arr2);
-  }
+  swap(alice[1].second, alice[2].second);
+  swap(bob[1].second, bob[2].second);
+  do {
+    sortall(bob);
+    do {
+      lli win_alice=0;
+      int i=0, j=0;
+      vector<pl> talice=alice, tbob=bob;
+      while(i<3 and j<3) {
+        lli offset=min(talice[i].second, tbob[j].second);
+        if((talice[i].first!=tbob[j].first) and win(talice[i].first, tbob[j].first)) {
+          win_alice+=offset;
+        }
+        talice[i].second-=offset;
+        tbob[j].second-=offset;
+        if(talice[i].second==0)
+          ++i;
+        if(tbob[j].second==0)
+          ++j;
+      }
+      ma=max(ma, win_alice);
+      mi=min(mi, win_alice);
+    } while(next_permutation(all(bob)));
+  } while(next_permutation(all(alice)));
+  cout << mi << space << ma << endl;
 }
 
 int main() {
@@ -134,8 +140,7 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   while(testcases--) {
     solve();
   }
