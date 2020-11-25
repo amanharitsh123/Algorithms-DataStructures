@@ -60,7 +60,7 @@ void input(vector<T> &arr,lli n) {
 
 template <typename T>
 void output(vector<T> arr) {
-  for(auto x:arr) cout<<x.x << space << x.y<<" ";
+  for(auto x:arr) cout<<x<<" ";
   cout<<endl;
 }
 
@@ -102,23 +102,116 @@ bool operator==(const coordx &p) const
   }
 };
 
-struct coordy {
-  lli x, y;
-  bool operator<(const coordy& o) const{
+struct coord {
+  lli i, x, y;
+  bool operator<(const coord& o) const{
     if(x!=o.x)
       return x<o.x;
     return y<o.y;
   }
-bool operator==(const coordy &p) const
+bool operator==(const coord &p) const
 	{
 		return x == p.x && y == p.y;
 	}
-  lli operator-(const coordy& o) {
-    return abs(o.x-x)+abs(o.y-y);
+  lli operator-(const coord& o) {
+    return min(abs(o.x-x), abs(o.y-y));
   }
 };
 
+bool fast=false;
+lli manhattan_dist(coord x, coord y) {
+  lli xd=abs(x.x-y.x);
+  lli yd=abs(x.y-y.y);
+  if(fast)
+    return min(xd, yd);
+  return xd+yd;
+}
+
+
 void solve() {
+  lli n, m;
+  cin >> n >> m;
+  vector<coord> arr;
+  lli x, y;
+  lli sx, sy, fx, fy;
+  cin >> sx >> sy >> fx >> fy;
+  coord start={-1, sx, sy};
+  coord end={-1, fx, fy};
+  for(int i=0; i<m; i++) {
+      cin >> x >> y;
+      if(x==fx and y==fy)
+        fast=true;
+      arr.pb({i, x, y});
+  }
+  vector<coord> original=arr;
+  sortall(arr);
+  vector<vector<int> > adj(m);
+  lli u, v;
+  for(int i=0; i<m; i++) {
+    u=arr[i].i;
+    if(i!=0) {
+      v=arr[i-1].i;
+      adj[u].pb(v);
+      adj[v].pb(u);
+    }
+    if(i!=m-1) {
+      v=arr[i+1].i;
+      adj[u].pb(v);
+      adj[v].pb(u);
+    }
+  }
+  for(auto &ele:arr)
+    swap(ele.x, ele.y);
+
+  sortall(arr);
+  set<pl> q;
+  vector<lli> dist(m, 1e18);
+  for(int i=0; i<m; i++) {
+    u=arr[i].i;
+    if(i!=0) {
+      v=arr[i-1].i;
+      adj[u].pb(v);
+      adj[v].pb(u);
+    }
+    if(i!=m-1) {
+      v=arr[i+1].i;
+      adj[u].pb(v);
+      adj[v].pb(u);
+    }
+    swap(arr[i].x, arr[i].y);
+    q.insert({arr[i]-start, arr[i].i});
+    dist[arr[i].i]=arr[i]-start;
+    swap(arr[i].x, arr[i].y);
+  }
+  vector<bool> visited(m, false);
+  while(q.size()) {
+    auto top=*q.begin();
+    q.erase(q.begin());
+    int u=top.second;
+    lli d=top.first;
+    visited[u]=true;
+    for(auto v:adj[u]) {
+      if(visited[v])
+        continue;
+      lli w=original[v]-original[u];
+      if(d+w<dist[v]) {
+        if(q.find({dist[v], v})!=q.end())
+          q.erase(q.find({dist[v], v}));
+        dist[v]=d+w;
+        q.insert({dist[v], v});
+      }
+    }
+  }
+  lli ans=1e18;
+  for(int i=0; i<m; i++) {
+    ans=min(ans, dist[i]+manhattan_dist(original[i], end));
+  }
+  cout << ans << endl;
+}
+
+
+
+/*void solve() {
   lli n, m;
   cin >> n >> m;
   lli sx, sy, fx, fy;
@@ -172,7 +265,7 @@ void solve() {
     }
   }
   cout << ans << endl;
-}
+}*/
 
 int main() {
   
