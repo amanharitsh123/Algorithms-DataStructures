@@ -61,7 +61,7 @@ void input(vector<T> &arr,lli n) {
 
 template <typename T>
 void output(vector<T> arr) {
-  for(auto x:arr) cout<<x<<" ";
+  for(auto x:arr) cout<<x<<"p";
   cout<<endl;
 }
 
@@ -88,7 +88,42 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  int n;
+  vector<lli> arr={0};
+  cin >> n;
+  lli temp;
+  for(int i=0; i<n; i++) {
+    cin >> temp;
+    arr.push_back(temp);
+  }
+  arr.push_back(0);
+  vector<lli> suffix(n+2, 0), prefix(n+2, 0);
+  for(int i=1; i<=n; i++) {
+    if(prefix[i-1]<0) {
+      prefix[i]=prefix[i-1];
+      continue;
+    }
+    prefix[i]=arr[i]-prefix[i-1];
+  }
+  for(int i=n; i>=1; i--) {
+    if(suffix[i+1]<0) {
+      suffix[i]=suffix[i+1];
+      continue;
+    }
+    suffix[i]=arr[i]-suffix[i+1];
+  }
+  bool pos=false;
+  for(int i=1; i<=n-1 and !pos; i++) {
+    int cur=i, next=i+1;
+    if(prefix[cur]>=0 and prefix[cur]==suffix[next]) {
+      pos=true;
+    }
+    if(prefix[cur-1]>=0 and suffix[next+1]>=0 and (arr[next]-prefix[cur-1] == arr[cur]-suffix[next+1]) and (arr[next]-prefix[cur-1])>=0) {
+      pos=true;
+    }
+  }
+  if(pos) cout << "YES" << endl;
+  else cout << "NO" << endl;
 }
 
 int main() {
@@ -102,3 +137,4 @@ int main() {
     solve(testcase);
   }
 }
+

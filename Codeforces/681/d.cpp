@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long int lli;
@@ -43,7 +42,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << endl;
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,8 +86,50 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+void solve() {
+  int n;
+  cin >> n;
+  vector<lli> arr;
+  input(arr, n);
+  vector<bool> isfront(n+1, false);
+  vector<bool> isback(n+1, false);
+  isfront[0]=true;
+  isback[n-1]=true;
+  for(int i=1; i<n; i++) {
+    isfront[i]=arr[i]<=arr[i-1] and isfront[i-1];
+  }
+  for(int i=n-2; i>=0; i--) {
+    isback[i]=arr[i]<=arr[i+1] and isback[i+1];
+  }
 
+  bool possible=false;
+  for(int i=0; i<n; i++) {
+    int left_possible, left_val, right_possible, right_val;
+    if(i-1>=0) {
+      left_possible=isfront[i-1];
+      left_val=arr[i-1];
+    } else {
+      left_possible=true;
+      left_val=inf;
+    }
+
+    if(i+1<n) {
+      right_possible=isback[i+1];
+      right_val=arr[i+1];
+    } else {
+      right_possible=true;
+      right_val=inf;
+    }
+
+    if(left_possible and right_possible and (left_val+right_val)>=arr[i]) {
+      possible=true;
+    }
+  }
+
+  if(possible)
+    cout << "YES" << endl;
+  else
+    cout << "NO" << endl;
 }
 
 int main() {
@@ -98,7 +139,8 @@ int main() {
 
   lli testcases;
   cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  while(testcases--) {
+    solve();
   }
 }
+

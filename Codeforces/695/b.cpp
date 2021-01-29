@@ -87,8 +87,53 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+int inti(vector<int> &arr, int l, int r) {
+  int n=arr.size();
+  int ans=0;
+  for(int i=l; i<=r; i++) {
+    if(arr[i]>arr[i-1] and arr[i]>arr[i+1]) {
+      ++ans;
+    } else if(arr[i]<arr[i-1] and arr[i]<arr[i+1]) {
+      ++ans;
+    }
+  }
+  return ans;
+}
 
+bool isint(vector<int> &arr, int i) {
+    if(arr[i]>arr[i-1] and arr[i]>arr[i+1]) {
+      return true;
+    } else if(arr[i]<arr[i-1] and arr[i]<arr[i+1]) {
+      return true;
+    }
+    return false;
+}
+
+void solve(int testcase) {
+  int n, cur;
+  cin >> n;
+  vector<int> arr;
+  input(arr, n);
+  int total=inti(arr, 1, n-2);
+  int ans=total;
+  for(int i=1; i<n-1; i++) {
+    if(isint(arr, i)) {
+      int original_value=arr[i];
+      vector<int> pos = {arr[i-1], arr[i+1]};
+      for(auto x:pos) {
+        cur=total;
+        int left=i, right=i;
+        if(i-1>0) left--;
+        if(i+1<n-1) right++;
+        cur-=inti(arr, left, right);
+        arr[i]=x;
+        cur+=inti(arr, left, right);
+        ans=min(ans, cur);
+        arr[i]=original_value;
+      }
+    }
+  }
+  cout << ans << endl;
 }
 
 int main() {
@@ -102,3 +147,4 @@ int main() {
     solve(testcase);
   }
 }
+

@@ -88,7 +88,13 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  lli n;
+  cin >> n;
+  if((n&(n-1))==0) {
+    cout << "NO" << endl;
+  } else {
+    cout << "YES" << endl;
+  }
 }
 
 int main() {
@@ -102,3 +108,4 @@ int main() {
     solve(testcase);
   }
 }
+

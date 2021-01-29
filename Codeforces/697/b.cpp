@@ -88,7 +88,16 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  lli n;
+  cin >> n;
+  lli twnty=2020;
+  lli twnto=2021;
+  bool possible=false;
+  for(lli i=0; i<=500 and (n-i*twnty)>=0; i++) {
+    if((n-i*twnty)%twnto==0) possible=true;
+  }
+  if(possible) cout << "YES" << endl;
+  else cout << "NO" << endl;
 }
 
 int main() {
@@ -102,3 +111,4 @@ int main() {
     solve(testcase);
   }
 }
+

@@ -88,7 +88,40 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  lli n, m;
+  cin >> n >> m;
+  vector<lli> arr;
+  vector<lli> type1, type2;
+  input(arr, n);
+  for(int i=0; i<n; i++) {
+    int type;
+    cin >> type;
+    if(type==1) {
+      type1.push_back(arr[i]);
+    } else {
+      type2.push_back(arr[i]);
+    }
+  }
+  sort(all(type1));
+  sort(all(type2), greater<lli> ());
+  vector<pl> newarr;
+  for(auto x:type1) newarr.push_back({x, 1});
+  for(auto x:type2) newarr.push_back({x, 2});
+  lli lo=0, hi=0, curval=0, curmem=0;
+  lli ans=inf;
+  while(hi<n) {
+    curmem+=newarr[hi].first;
+    curval+=newarr[hi].second;
+    while(lo<=hi and curmem>=m) {
+      ans=min(ans, curval);
+      curmem-=newarr[lo].first;
+      curval-=newarr[lo].second;
+      ++lo;
+    }
+    ++hi;
+  }
+  if(ans==inf) ans=-1;
+  cout << ans << endl;
 }
 
 int main() {
@@ -102,3 +135,4 @@ int main() {
     solve(testcase);
   }
 }
+

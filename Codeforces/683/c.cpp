@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long int lli;
@@ -43,7 +42,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << endl;
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,8 +86,50 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+typedef struct item {
+  lli w, ind;
+  
+} item;
 
+bool operator<(const item& lhs, const item& rhs) {
+      return lhs.w < rhs.w;
+}
+
+void solve() {
+  lli n, w;
+  cin >> n >> w;
+  vector<lli> weights;
+  input(weights, n);
+  lli sum=0;
+  lli lower_bound=(w+1)/2;
+  bool possible=true;
+  if(*min_element(all(weights))>w) {
+    cout << -1 << endl;
+    return;
+  }
+  vector<item> items;
+  for(int i=0; i<n; i++) items.push_back({weights[i], i});
+  int i=0;
+  sortall(items);
+  while(i<weights.size()) {
+    sum+=items[i].w;
+    i++;
+    if(sum>=lower_bound and sum<=w) {
+      int j=0;
+      cout << i << endl;
+      while(j<i) {
+        cout << items[j].ind+1LL << space;
+        j++;
+      }
+      cout << endl;
+      return;
+    } else if (sum>w and items[i-1].w<=w) {
+      cout << 1 << endl;
+      cout << items[i-1].ind+1LL << endl;
+      return;
+    }
+  }
+  cout << -1 << endl;
 }
 
 int main() {
@@ -98,7 +139,8 @@ int main() {
 
   lli testcases;
   cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  while(testcases--) {
+    solve();
   }
 }
+

@@ -43,7 +43,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << endl;
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,8 +87,74 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+#define N 100
 
+int mat[N][N];
+
+map<int, pi> mapper = { 
+  {1, {2, 1}}, {2, {2, 1}}, {3, {0, 3}}, {4, {0, 3}}
+};
+
+int one(int x, int y) {
+  int cnt=0;
+  for(int i=0; i<2; i++) {
+    for(int j=0; j<2; j++) {
+      cnt+=mat[x+i][y+j];
+    }
+  }
+  return cnt;
+}
+
+vector<vector<int> > ans;
+
+void foo(int x, int y) {
+  int cone, czero;
+  while((cone=one(x, y))) {
+    pi t=mapper[cone];
+    int targetone=t.second;
+    int targetzero=t.first;
+    vector<int> temp;
+    for(int i=x; i<x+2; i++) {
+      for(int j=y; j<y+2; j++) {
+        if(mat[i][j]==1) {
+          if(targetone) {
+            targetone--;
+            mat[i][j]=0;
+            temp.push_back(i+1);
+            temp.push_back(j+1);
+          }
+        } else {
+          if(targetzero) {
+            targetzero--;
+            mat[i][j]=1;
+            temp.push_back(i+1);
+            temp.push_back(j+1);
+          }
+        }
+      }
+    }
+    ans.push_back(temp);
+  }
+}
+
+void solve() {
+  int n, m;
+  cin >> n >> m;
+  ans.clear();
+  for(int i=0; i<n; i++) {
+    for(int j=0; j<m; j++) {
+      char c;
+      cin >> c;
+      mat[i][j]=c-'0';
+    }
+  }
+  for(int i=0; i<=n-2; i++) {
+    for(int j=0; j<=m-2; j++) {
+      foo(i, j);
+    }
+  }
+  cout << ans.size() << endl;
+  for(auto &x:ans) output(x);
 }
 
 int main() {
@@ -98,7 +164,8 @@ int main() {
 
   lli testcases;
   cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  while(testcases--) {
+    solve();
   }
 }
+

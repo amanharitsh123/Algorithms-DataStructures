@@ -88,7 +88,21 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  int n, x;
+  cin >> n >> x;
+  vector<lli> arr;
+  input(arr, n);
+  lli ans=0;
+  for(auto y:arr) {
+    lli offset=1;
+    lli org=y;
+    while(y%x==0) {
+      offset++, y/=x;
+    }
+    ans+=offset*org;
+    cout << "off is " << offset << endl;
+  }
+  cout << ans << endl;
 }
 
 int main() {
@@ -102,3 +116,4 @@ int main() {
     solve(testcase);
   }
 }
+

@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long int lli;
@@ -43,7 +42,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << endl;
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,8 +86,39 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
-
+void solve() {
+  int a, b;
+  cin >> a >> b;
+  string inp;
+  cin >> inp;
+  // make units
+  int lastone=-1;
+  int cost=a;
+  int i=0;
+  while(i<inp.size() and inp[i]=='0')
+    ++i;
+  while(i<inp.size() and inp[i]=='1') {
+    lastone=i;
+    i++;
+  }
+  if(lastone==-1) {
+    cout << 0 << endl;
+    return;
+  }
+  cost=a;
+  while(i<inp.size()) {
+    if(inp[i]=='0') {
+      ++i;
+      continue;
+    }
+    int x=i-lastone-1;
+    cost+=min(a, x*b);
+    while(i<inp.size() and inp[i]=='1') {
+      lastone=i;
+      i++;
+    }
+  }
+  cout << cost << endl;
 }
 
 int main() {
@@ -98,7 +128,8 @@ int main() {
 
   lli testcases;
   cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  while(testcases--) {
+    solve();
   }
 }
+

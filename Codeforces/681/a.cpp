@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long int lli;
@@ -43,8 +42,8 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
-
+#define kick(t) cout << "Case #" << t << ":" << endl;
+#define N 401
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
 typedef vector<ll>		vl;
@@ -87,8 +86,28 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+vector<int> primes;
+void sieve() {
+  bool isprime[N];
+  memset(isprime, true, sizeof(isprime));
+  for(int i=2; i<N; i++) {
+    if(!isprime[i])
+      continue;
+    primes.push_back(i);
+    for(int j=2*i; j<N; j+=i)
+      isprime[j]=false;
+  }
+}
 
+void solve() {
+  int n;
+  cin >> n;
+  int i=4*n;
+  while(n--) {
+    cout << i << space;
+    i-=2;
+  }
+  cout << endl;
 }
 
 int main() {
@@ -98,7 +117,9 @@ int main() {
 
   lli testcases;
   cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  sieve();
+  while(testcases--) {
+    solve();
   }
 }
+

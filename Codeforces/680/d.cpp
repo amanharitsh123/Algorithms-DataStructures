@@ -5,7 +5,6 @@
 #include<set>
 #include<cstring>
 #include<numeric>
-
 using namespace std;
 typedef long long int lli;
 
@@ -41,9 +40,9 @@ typedef long long int lli;
 #define sortall(x) sort(all(x))
 #define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
 #define PI 3.1415926535897932384626
-#define MOD 1000000007
+#define MOD 998244353 
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << endl;
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,8 +86,36 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+vector<lli> inverse, fact;
 
+void pre(int N) {
+  inverse.resize(N, 0);
+  fact.resize(N, 0);
+  lli f=1;
+  fact[1]=1;
+  inverse[1]=1;
+  for(lli i=2; i<N; i++) {
+    f=mul(f, i);
+    fact[i]=f;
+    inverse[i]=power(f, MOD-2);
+  }
+}
+
+lli ncr(lli n) {
+  // 2*n! / n! * n!
+  return mul(fact[2*n], mul(inverse[n], inverse[n]));
+}
+
+void solve() {
+  int n;
+  cin >> n;
+  vector<lli> arr;
+  pre(2*n+2);
+  input(arr, 2*n);
+  sortall(arr);
+  lli sum=accumulate(arr.begin(), arr.end(), 0LL);
+  for(int i=0; i<n; i++) sum-=2*arr[i];
+  cout << mul(sum , ncr(n)) << endl;
 }
 
 int main() {
@@ -96,9 +123,9 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  lli testcases=1;
+  while(testcases--) {
+    solve();
   }
 }
+

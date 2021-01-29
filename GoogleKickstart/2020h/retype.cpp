@@ -43,7 +43,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << " ";
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -88,7 +88,10 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  lli n, k, s;
+  cin >> n >> k >> s;
+  kick(testcase);
+  cout << k-1+min(k-s+n-s+1, n+1) << endl;
 }
 
 int main() {
@@ -102,3 +105,4 @@ int main() {
     solve(testcase);
   }
 }
+

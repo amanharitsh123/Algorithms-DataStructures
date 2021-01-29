@@ -88,7 +88,36 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  // left[i]=ind = -1
+  // right[i]=ind=-1
+  int n;
+  vector<lli> arr;
+  cin >> n;
+  input(arr, n);
+  vector<lli> st;
+  vector<lli> left(n, -1), right(n, n);
+  for(int i=0; i<n; i++) {
+    while(st.size() and arr[st.back()]>=arr[i]) {
+      st.pop_back();
+    }
+    if(st.size()) left[i]=st.back();
+    st.push_back(i);
+  }
+  st.clear();
+  for(int i=n-1; i>=0; i--) {
+    while(st.size() and arr[st.back()]>=arr[i]) {
+      st.pop_back();
+    }
+    if(st.size()) right[i]=st.back();
+    st.push_back(i);
+  }
+  lli ans=0;
+  for(int i=0; i<n; i++) {
+    lli l=left[i];
+    lli r=right[i];
+    ans=max(ans, (r-l-1)*arr[i]);
+  }
+  cout << ans << endl;
 }
 
 int main() {
@@ -96,9 +125,9 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
+  lli testcases=1;
   for(int testcase=0; testcase<testcases; testcase++) {
     solve(testcase);
   }
 }
+

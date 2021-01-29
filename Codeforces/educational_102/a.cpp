@@ -87,8 +87,22 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+string foo(bool x) {
+  if(x) return "yes";
+  else return "no";
+}
 
+void solve(int testcase) {
+  int n, d;
+  cin >> n >> d;
+  vector<int> arr;
+  input(arr, n);
+  sortall(arr);
+  if(arr.size()<=2) {
+    cout << foo( arr.back()<=d) << endl;
+  } else {
+    cout <<  foo(((arr[0]+arr[1])<=d) or (arr.back()<=d)) << endl;
+  }
 }
 
 int main() {
@@ -102,3 +116,4 @@ int main() {
     solve(testcase);
   }
 }
+

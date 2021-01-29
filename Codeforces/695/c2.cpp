@@ -88,7 +88,22 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  vector<int> n;
+  input(n, 3);
+  vector<lli> arr[3];
+  for(int i=0; i<3; i++) { 
+    input(arr[i], n[i]);
+    sortall(arr[i]);
+  }
+  vector<lli> turn = {0, 1, 2};
+  lli ans=0;
+  do {
+    lli s1=accumulate(all(arr[turn[0]]), 0LL);
+    lli s2=accumulate(all(arr[turn[1]]), 0LL);
+    lli s3=accumulate(all(arr[turn[2]]), 0LL);
+    ans=max(ans, -s2+s3+s1);
+  } while(next_permutation(all(turn)));
+  cout << ans << endl;
 }
 
 int main() {
@@ -97,8 +112,9 @@ int main() {
   cin.tie(NULL);
 
   lli testcases;
-  cin>>testcases;
+  cin >> testcases;
   for(int testcase=0; testcase<testcases; testcase++) {
     solve(testcase);
   }
 }
+

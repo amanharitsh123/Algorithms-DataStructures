@@ -88,7 +88,17 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  int n;
+  cin >> n;
+  if(n==1) {
+    cout << 9 << endl;
+  } else {
+    cout << 98 ;
+    for(int i=1; i<=n-2; i++) {
+      cout << (8+i)%10;
+    }
+    cout << endl;
+  }
 }
 
 int main() {
@@ -102,3 +112,4 @@ int main() {
     solve(testcase);
   }
 }
+

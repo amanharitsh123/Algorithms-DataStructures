@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long int lli;
@@ -43,7 +42,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << endl;
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,8 +86,52 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+lli foo(lli p, lli q, lli factor) {
+  int cnt_p=0, cnt_q=0;
+  lli cur=p;
+  while(cur%factor==0) {
+    ++cnt_p;
+    cur/=factor;
+  }
+  cur=q;
+  while(cur%factor==0) {
+    ++cnt_q;
+    cur/=factor;
+  }
+  if(cnt_p==0)
+    return p;
+  int offset=cnt_p-cnt_q;
+  cur=p;
+  while(offset-->=0) {
+    cur/=factor;
+  }
+  return cur;
+}
 
+void solve() {
+  lli p, q;
+  cin >> p >> q;
+  lli ans=1;
+  if(q%2==0) 
+    ans=max(ans, foo(p, q, 2));
+  lli number=q;
+  while(number%2==0) {
+    number/=2;
+  }
+  for(lli i=3; i*i<=number; i+=2) {
+    lli cur=p;
+    if(q%i!=0)
+      continue;
+    while(number%i==0)
+      number/=i;
+    lli f1=i, f2=q/i;
+    ans=max(ans, foo(p, q, f1));
+  }
+  if(number>2)
+    ans=max(ans, foo(p, q, number)); // q is a prime
+  if(p%q==0 and (p/q)%q!=0)
+    ans=max(ans, p/q);
+  cout << ans << endl;
 }
 
 int main() {
@@ -98,7 +141,8 @@ int main() {
 
   lli testcases;
   cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  while(testcases--) {
+    solve();
   }
 }
+

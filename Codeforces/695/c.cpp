@@ -88,7 +88,46 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  int n[3];
+  for(int i=0; i<3; i++) cin >> n[i];
+  vector<lli> mat[3];
+  lli total_sum=0;
+  lli ans=0;
+  for(int i=0; i<3; i++) {
+    input(mat[i], n[i]);
+    sortall(mat[i]);
+    total_sum=accumulate(all(mat[i]), total_sum);
+  }
+  for(int i=0; i<3; i++) {
+    for(int j=0; j<n[i]; j++) {
+      lli m1=mat[i][j];
+      for(int k=0; k<3; k++) {
+        m1=mat[i][j];
+        if(k==i) continue;
+        int closest_ind=lower_bound(all(mat[k]), m1) - mat[k].begin();
+        for(int off=-1; off<=1; off++) {
+          m1=mat[i][j];
+          if(closest_ind+off >=0 and closest_ind+off<n[k]) {
+            int t=closest_ind+off;
+            lli m2=mat[k][t];
+            // chosen m1 and m2
+            // m1-(s2-m2)-s3
+            // m2-(s1-m1)
+            lli cursum1=total_sum-accumulate(all(mat[i]), 0LL)-m2;
+            lli cursum2=accumulate(all(mat[i]), 0LL)-m1;
+            cout << m1 << space << m2 << space << ans << endl;
+            cout << "cursum1= " << cursum1 << " cursum2= " <<cursum2 << endl;
+            m1-=cursum1;
+            m2-=cursum2;
+            ans=max(ans, m1-m2);
+            ans=max(ans, m2-m1);
+          }
+        }
+      }
+    }
+  }
+  cout << "final ans is ";
+  cout << ans << endl;
 }
 
 int main() {
@@ -97,8 +136,9 @@ int main() {
   cin.tie(NULL);
 
   lli testcases;
-  cin>>testcases;
+  cin >> testcases;
   for(int testcase=0; testcase<testcases; testcase++) {
     solve(testcase);
   }
 }
+

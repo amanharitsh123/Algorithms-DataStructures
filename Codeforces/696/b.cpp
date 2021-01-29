@@ -87,8 +87,27 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+#define N 100000
+int prime[N];
+vector<int> primes;
 
+void pre() {
+  for(int i=1; i<N; i++) prime[i]=true;
+  for(int i=2; i<N; i++) {
+    if(prime[i]==false) continue;
+    primes.push_back(i);
+    for(int j=2*i; j<N; j+=i) prime[j]=false;
+  }
+}
+
+void solve(int testcase) {
+  // a => 4 divisors, diff b/w two divisors atleast d
+  int d;
+  cin >> d;
+  auto it1=lower_bound(all(primes), d+1);
+  auto it2=it1;
+  while((*it2)-(*it1)<d) it2++;
+  cout << (*it1)*(*it2) << endl;
 }
 
 int main() {
@@ -98,7 +117,9 @@ int main() {
 
   lli testcases;
   cin>>testcases;
+  pre();
   for(int testcase=0; testcase<testcases; testcase++) {
     solve(testcase);
   }
 }
+

@@ -88,7 +88,17 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  int n, k;
+  cin >> n >> k;
+  vector<int> ans;
+  for(int i=1; i<=k; i++) ans.pb(i);
+  int last=n-k+1;
+  int num=k;
+  for(int i=k-last; i<k; i++) {
+    ans[i]=num;
+    num--;
+  }
+  output(ans);
 }
 
 int main() {
@@ -102,3 +112,4 @@ int main() {
     solve(testcase);
   }
 }
+

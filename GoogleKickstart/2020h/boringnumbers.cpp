@@ -5,6 +5,7 @@
 #include<set>
 #include<cstring>
 #include<numeric>
+#include<sstream>
 
 using namespace std;
 typedef long long int lli;
@@ -43,7 +44,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t+1 << ":" << " ";
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,8 +88,107 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+string closest(string x) {
+  int ln=x.size();
+  string ans;
+  while(ln--) {
+    ans.push_back('9');
+  }
+  return ans;
+}
 
+string plusone(string x) {
+  int ln=x.size();
+  string ans="1";
+  while(ln--) ans.push_back('0');
+  return ans;
+}
+
+vector<char> numbers[] = {{'1', '3', '5', '7', '9'}, {'0', '2', '4', '6', '8'}};
+
+lli total(int x, int total) {
+  lli n=total-x;
+  return power(5, n);
+}
+
+int to_int(string x) {
+  stringstream ss;
+  ss << x;
+  int ans;
+  ss >> ans;
+  return ans;
+}
+
+bool good(int i) {
+  stringstream ss;
+  ss << i;
+  string ans;
+  ss >> ans;
+  for(int i=0; i<ans.size(); i++) {
+    if((i%2+1)%2 != ((ans[i]-'0')%2))
+      return false;
+  }
+  return true;
+}
+
+lli brute(string x, string y) {
+  int l=to_int(x);
+  int r=to_int(y);
+  int ans=0;
+  for(int i=l; i<=r; i++) {
+      if(good(i)) {++ans;} 
+  }
+  return ans;
+}
+
+lli foo(string x, string y, int pos) {
+  lli ans=0;
+  if(pos>=x.size()) return 1;
+  for(auto c:numbers[pos%2]) {
+    if(c<x[pos])
+      continue;
+    if(c>y[pos])
+      continue;
+    if(c==y[pos] and c==x[pos]) {
+      ans+=foo(x, y, pos+1);
+    } else if(c==y[pos]) {
+      string backup;
+      for(int i=pos+1; i<x.size(); i++) {
+        backup.push_back(x[i]);
+        x[i]='0';
+      }
+      ans+=foo(x, y, pos+1);
+      x=x.substr(0, pos+1)+backup;
+    } else if (c==x[pos]) {
+      string backup;
+      for(int i=pos+1; i<x.size(); i++) {
+        backup.push_back(y[i]);
+        y[i]='9';
+      }
+      ans+=foo(x, y, pos+1);
+      y=y.substr(0, pos+1)+backup;
+    } else {
+      ans+=total(pos+1, x.size());
+    }
+  }
+  return ans;
+}
+
+void solve(int testcase) {
+  string x, y, tx, ty;
+  cin >> x >> y;
+  tx=x;
+  ty=y;
+  lli ans=0;
+  while(x.size()!=y.size()) {
+    string next=closest(x);
+    ans+=foo(x, next, 0);
+    x=plusone(next);
+  }
+  ans+=foo(x, y, 0);
+  kick(testcase);
+  cout << ans << endl;
+  cout << "brute ans " << brute(tx, ty) << endl;
 }
 
 int main() {
@@ -102,3 +202,4 @@ int main() {
     solve(testcase);
   }
 }
+

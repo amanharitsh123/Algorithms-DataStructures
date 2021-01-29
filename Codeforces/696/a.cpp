@@ -87,8 +87,28 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+int check(char x) {
+  if(x=='0') return 1;
+  else return 2;
+}
 
+void solve(int testcase) {
+  int n;
+  string b;
+  cin >> n;
+  cin >> b;
+  string ans;
+  int prev=-1;
+  for(int i=0; i<n; i++) {
+    if(check(b[i])==prev) {
+      ans.push_back('0');
+      prev=b[i]-'0';
+    } else {
+      ans.push_back('1');
+      prev=check(b[i]);
+    }
+  }
+  cout << ans << endl;
 }
 
 int main() {
@@ -102,3 +122,4 @@ int main() {
     solve(testcase);
   }
 }
+

@@ -87,8 +87,54 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+int compute(vector<pi> &left, vector<pi> &right, vector<int> &value, int l, int r) {
+  pi left_interval, right_interval;
+  if(l>=0) left_interval=left[l];
+  else left_interval={0, 0};
+  if(r<right.size()) right_interval=right[r];
+  else right_interval={0, 0};
+  int v=l>=0?value[l]:0;
+  //cout << "left interval " << left_interval.first << " " << left_interval.second << endl;
+  //cout << "right interval " << right_interval.first << " " << right_interval.second << endl;
+  //cout << "value " << value[l] << endl;
+  int ma=max(left_interval.first, right_interval.first+v);
+  int mi=min(left_interval.second, right_interval.second+v);
+  return ma-mi+1;
+}
 
+void solve(int testcase) {
+  int n, m;
+  cin >> n >> m;
+  string inp;
+  cin >> inp;
+  vector<pi> prefix(n);
+  vector<pi> suffix(n);
+  vector<int> value(n);
+  int ma=0, mi=0;
+  int cur=0;
+  for(int i=0; i<n; i++) {
+    if(inp[i]=='+') ++cur;
+    else --cur;
+    ma=max(ma, cur);
+    mi=min(mi, cur);
+    value[i]=cur;
+    prefix[i]={ma, mi};
+  }
+  ma=0;
+  mi=0;
+  cur=0;
+  for(int i=n-1; i>=0; i--) {
+    if(inp[i]=='-') ++cur;
+    else --cur;
+    ma=max(ma, cur);
+    mi=min(mi, cur);
+    suffix[i]={ma-cur, mi-cur};
+  }
+  for(int i=0; i<m; i++) {
+    int l, r;
+    cin >> l >> r, l--, r--;
+    cout << compute(prefix, suffix, value, l-1, r+1) << endl;
+  }
 }
 
 int main() {
@@ -102,3 +148,4 @@ int main() {
     solve(testcase);
   }
 }
+

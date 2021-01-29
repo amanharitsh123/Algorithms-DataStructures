@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long int lli;
@@ -43,7 +42,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << endl;
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,18 +86,57 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+typedef struct move {
+  int x, y, z;
+} mov;
 
+bool possible(vector<lli> &arr) {
+  lli xorofarray=0;
+  for(auto x:arr) {
+    xorofarray^=x;
+  }
+  if(arr.size()%2==0 and xorofarray!=0)
+    return false;
+  return true;
 }
+
+void solve() {
+  int n;
+  cin >> n;
+  vector<lli> arr;
+  input(arr, n);
+  // 2 cases: n-> even , n-> odd
+  // not possible when n is even and the xor of entire array is non zero.
+  if(!possible(arr)) {
+    cout << "NO" << endl;
+    return;
+  }
+
+  // pick 2 elements at a time
+  //
+  vector<mov> moves;
+  for(int i=0; i+1<=n-2; i+=2) {
+    moves.pb({i+1, i+2, n});
+  }
+  for(int i=0; i+1<=n-2; i+=2) {
+    moves.pb({i+1, i+2, n});
+  }
+  cout << "YES" << endl;
+  cout << moves.size() << endl;
+  for(auto x:moves) {
+    cout << x.x << space << x.y << space << x.z << endl;
+  }
+}
+
 
 int main() {
   
   ios_base::sync_with_stdio(false);
   cin.tie(NULL);
 
-  lli testcases;
-  cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  lli testcases=1;
+  while(testcases--) {
+    solve();
   }
 }
+

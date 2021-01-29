@@ -88,7 +88,17 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  lli n, x;
+  cin >> n >> x;
+  vector<lli> arr;
+  input(arr, n);
+  lli sum=0;
+  for(auto y:arr) sum+=y;
+  cout << sum/x + (sum%x!=0) << space;
+  sum=0;
+  lli offset=0;
+  for(auto y:arr) sum+=(y)/x, offset+=((y%x)!=0);
+  cout << sum+offset << endl;
 }
 
 int main() {
@@ -102,3 +112,4 @@ int main() {
     solve(testcase);
   }
 }
+

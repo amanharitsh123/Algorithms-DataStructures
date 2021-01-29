@@ -4,7 +4,6 @@
 #include<algorithm>
 #include<set>
 #include<cstring>
-#include<numeric>
 
 using namespace std;
 typedef long long int lli;
@@ -43,7 +42,7 @@ typedef long long int lli;
 #define PI 3.1415926535897932384626
 #define MOD 1000000007
 #define space ' '
-#define kick(t) cout << "Case #" << t+1 << ":" << endl;
+#define kick(t) cout << "Case #" << t << ":" << endl;
 
 typedef pair<ll, ll>	pl;
 typedef vector<int>		vi;
@@ -87,8 +86,77 @@ lli power(lli a,lli b) {
   return ans;
 }
 
-void solve(int testcase) {
+#define N 4002
+#define K 4002
 
+int dp[N][K];
+int prev_selected[N][K];
+vector<int> arr;
+vector<int> get_selected_elements(int n, int k) {
+  vector<int> ans;
+  while(k>0 and n>0) {
+    //cout << "k is " << k << endl;
+    int cur=prev_selected[n][k];
+    ans.push_back(cur-1);
+    n=prev_selected[n][k-arr[cur-1]];
+    k-=arr[cur-1];
+  }
+  return ans;
+}
+
+void solve() {
+  memset(dp, inf, sizeof(dp));
+  memset(prev_selected, -1, sizeof(prev_selected));
+  int n, k;
+  cin >> n >> k;
+  arr.clear();
+  input(arr, n);
+  sortall(arr);
+  for(int i=1; i<=n; i++) {
+    dp[i][k]=dp[i-1][k];
+    prev_selected[i][0]=0;
+    dp[i][0]=0;
+    prev_selected[i][k]=prev_selected[i-1][k];
+    prev_selected[i][arr[i-1]]=i;
+    for(int sum=K-1; sum>0; sum--) {
+      int other=sum-arr[i-1];
+      if(other<0) { 
+        other=sum;
+        dp[i][other]=dp[i-1][other];
+        prev_selected[i][other]=prev_selected[i-1][other];
+        continue;
+      }
+      if(dp[i][sum]>(dp[i-1][other]+1)) {
+        dp[i][sum]=dp[i-1][other]+1;
+        prev_selected[i][sum]=i;
+        prev_selected[i][other]=prev_selected[i-1][other];
+      }
+    }
+  }
+  while(k<K and dp[n][k]==inf) ++k;
+  if(k==K) {
+    cout << -1 << endl;
+    return;
+  }
+  //cout << "prev selected " << prev_selected[n][k] << endl;
+  //cout << "minimum elements for k " << dp[n][k] << endl;
+  vector<int> indices = get_selected_elements(n, k);
+  //cout << "seleceted indices are ";
+  //output(indices);
+  map<int, int> mp;
+  for(auto x:indices) mp[x]=1;
+  int count=0, cursum=0, i=n-1;
+  for(i=n-1; i>=0 and cursum<k; i--) {
+    if(mp.find(i)!=mp.end())
+      continue;
+    cursum+=arr[i];
+    count++;
+  }
+  if(cursum<k) {
+    cout << -1 << endl;
+    return;
+  }
+  cout << count+dp[n][k] << endl;;
 }
 
 int main() {
@@ -98,7 +166,8 @@ int main() {
 
   lli testcases;
   cin>>testcases;
-  for(int testcase=0; testcase<testcases; testcase++) {
-    solve(testcase);
+  while(testcases--) {
+    solve();
   }
 }
+

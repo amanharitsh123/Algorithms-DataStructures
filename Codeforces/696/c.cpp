@@ -88,7 +88,50 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  int n;
+  cin >> n;
+  vector<lli> arr, possible;
+  lli temp;
+  for(int i=0; i<2*n; i++) {
+    cin >> temp;
+    arr.push_back(temp);
+  }
+  sort(all(arr));
+  for(int i=0; i<2*n-1; i++) {
+    possible.push_back(arr[i]+arr.back());
+  }
+  
+  for(auto x:possible) {
+    multiset<lli> copy;
+    for(auto y:arr) copy.insert(y);
+    bool pos=true;
+    lli cand=x;
+    vector<pl> values;
+    while(pos and copy.size()) {
+      lli max_value=*copy.rbegin();
+      lli target=cand-max_value;
+      auto it=copy.find(target);
+      if(it==copy.end()) {
+        pos=false;
+      } else {
+        copy.erase(it);
+        if(copy.find(max_value)==copy.end()) {
+          pos=false;
+          break;
+        }
+        copy.erase(copy.find(max_value));
+        values.push_back({max_value, target});
+        cand=max_value;
+      }
+    }
+    if(pos) {
+      cout << "YES" << endl;
+      cout << x << endl;
+      for(auto pp:values) cout << pp.first << space << pp.second << endl;
+      return ;
+    }
+  }
+  cout << "NO" << endl;
 }
 
 int main() {
@@ -102,3 +145,4 @@ int main() {
     solve(testcase);
   }
 }
+

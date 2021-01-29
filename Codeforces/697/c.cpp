@@ -88,7 +88,29 @@ lli power(lli a,lli b) {
 }
 
 void solve(int testcase) {
-
+  int na, nb, k;
+  cin >> na >> nb >> k;
+  vector<int> a;
+  vector<int> b;
+  input(a, k);
+  input(b, k);
+  vector<int> counta(na, 0);
+  vector<int> countb(nb, 0);
+  lli total=0;
+  total=k*(k-1LL)/2LL;
+  for(int i=0; i<k; i++) {
+    counta[a[i]-1]++;
+  }
+  for(int i=0; i<k; i++) {
+    countb[b[i]-1]++;
+  }
+  for(auto x:counta) {
+    total-=(x*(x-1LL))/2LL;
+  }
+  for(auto x:countb) {
+    total-=(x*(x-1LL))/2LL;
+  }
+  cout << total << endl;
 }
 
 int main() {
@@ -102,3 +124,4 @@ int main() {
     solve(testcase);
   }
 }
+
